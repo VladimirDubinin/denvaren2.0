@@ -34,7 +34,7 @@ return [
          *
          * For reference, see https://docs.defstudio.it/telegraph/webhooks/overview
          */
-        'handler' => \modules\Telegraph\Controllers\Handler::class,
+        'handler' => Modules\Telegraph\Controllers\Handler::class,
 
         /*
          * Middleware to be applied to the webhook route
