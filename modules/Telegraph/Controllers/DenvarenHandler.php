@@ -4,15 +4,15 @@ namespace Modules\Telegraph\Controllers;
 
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 
-class Handler extends WebhookHandler
+class DenvarenHandler extends WebhookHandler
 {
     protected function handleUnknownCommand($text): void
     {
         $this->chat->html('<b>Нет такой команды:</b> ' . $text)->send();
     }
 
-    public function hello(): void
+    public function start(): void
     {
-        $this->reply('Привет!');
+        $this->reply('Приветвую нового пользователя!');
     }
 }
