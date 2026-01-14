@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Telegraph\Controllers;
+namespace App\Http\Controllers;
 
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 
