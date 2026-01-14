@@ -10,4 +10,9 @@ class Handler extends WebhookHandler
     {
         $this->chat->html('<b>Нет такой команды:</b> ' . $text)->send();
     }
+
+    public function hello(): void
+    {
+        $this->reply('Привет!');
+    }
 }
