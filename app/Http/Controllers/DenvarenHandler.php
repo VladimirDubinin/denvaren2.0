@@ -13,7 +13,7 @@ class DenvarenHandler extends WebhookHandler
         $this->chat->html('<b>Нет такой команды:</b> ' . $text)->send();
     }
 
-    protected function start(): void
+    public function start(): void
     {
         $this->reply('Приветствую нового пользователя!');
     }
@@ -23,7 +23,7 @@ class DenvarenHandler extends WebhookHandler
         $this->chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
     }
 
-    protected function com(): void
+    public function com(): void
     {
         Telegraph::registerBotCommands([
             'list' => 'Список дат',
@@ -32,17 +32,17 @@ class DenvarenHandler extends WebhookHandler
         ])->send();
     }
 
-    protected function list(): void
+    public function list(): void
     {
         $this->reply('Вывожу список дат...');
     }
 
-    protected function add(): void
+    public function add(): void
     {
         $this->reply('Добавляю дату...');
     }
 
-    protected function delete(): void
+    public function delete(): void
     {
         $this->reply('Удаляю дату...');
     }
