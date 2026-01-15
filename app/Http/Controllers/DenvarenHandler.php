@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use Illuminate\Support\Stringable;
 
 class DenvarenHandler extends WebhookHandler
 {
@@ -13,6 +14,11 @@ class DenvarenHandler extends WebhookHandler
 
     public function start(): void
     {
-        $this->reply('Приветвую нового пользователя!');
+        $this->reply('Приветствую нового пользователя!');
+    }
+
+    protected function handleChatMessage(Stringable $text): void
+    {
+        $this->chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
     }
 }
