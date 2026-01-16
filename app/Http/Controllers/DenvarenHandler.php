@@ -49,7 +49,9 @@ class DenvarenHandler extends WebhookHandler
 
     public function list(): void
     {
-        $holidays = Holiday::query()->where("chat_id", $this->chat->id)->get();
+        $holidays = Holiday::active()
+            ->where("chat_id", $this->chat->id)
+            ->get();
         if ($holidays->isEmpty()) {
             $this->reply('Не нашёл ни одной даты. Для добавления праздника используйте команду /add');
         } else {

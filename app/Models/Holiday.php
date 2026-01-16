@@ -5,6 +5,7 @@ namespace App\Models;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -14,6 +15,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $date
  * @property string|null $description
  * @property boolean|null $repeat
+ *
+ * @method static Builder|Holiday active()
  */
 class Holiday extends Model
 {
@@ -41,5 +44,10 @@ class Holiday extends Model
     public function chat(): HasOne
     {
         return $this->hasOne(TelegraphChat::class, 'id', 'chat_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereNotNull('date')->whereNotNull('description');
     }
 }
