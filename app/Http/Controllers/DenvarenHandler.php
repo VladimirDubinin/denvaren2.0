@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
+use App\Models\Holiday;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
@@ -39,7 +41,13 @@ class DenvarenHandler extends WebhookHandler
 
     public function add(): void
     {
-        $this->reply('Добавляю дату...');
+        $chat = $this->chat;
+        $holiday = new Holiday();
+        $holiday->chat_id = $chat->id;
+        $chat->waiting_add_answer = true;
+        $chat->save();
+        $holiday->save();
+        $this->reply('Введите дату праздника');
     }
 
     public function delete(): void
