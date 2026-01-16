@@ -63,13 +63,11 @@ class DenvarenHandler extends WebhookHandler
 
     public function add(): void
     {
-        $this->chat->update(['waiting_add_answer' => true, 'waiting_delete_answer' => false]);
         $this->addHolidayService->addNewHoliday($this->chat);
     }
 
     public function delete(): void
     {
-        $this->chat->update(['waiting_delete_answer' => true, 'waiting_add_answer' => false]);
-        $this->reply('Укажите дату праздника, который хотите удалить');
+        $this->deleteHolidayService->startDeletingHoliday($this->chat);
     }
 }

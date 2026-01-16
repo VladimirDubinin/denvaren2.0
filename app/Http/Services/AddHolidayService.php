@@ -13,6 +13,8 @@ class AddHolidayService
 {
     public function addNewHoliday(TelegraphChat $chat): void
     {
+        $chat->waiting_delete_answer = false;
+
         // Смотрим, есть ли даты в процессе добавления
         $newHoliday = $this->getCurrentHoliday($chat->id);
         // Если нет, создаём новую
@@ -33,6 +35,9 @@ class AddHolidayService
         } else {
             $chat->message('Продолжим добавление праздника! Введите описание праздника')->send();
         }
+
+        $chat->waiting_add_answer = true;
+        $chat->save();
     }
 
     public function updateNewHoliday(TelegraphChat $chat, Stringable $text): void
@@ -46,7 +51,7 @@ class AddHolidayService
         } elseif (empty($currentHoliday->date)) {
             $date = Carbon::createFromFormat('d.m.Y', $text);
             if (empty($date)) {
-                $chat->message('Некорректный формат даты :( Введите дату праздника в таком формате: ' .
+                $chat->message('Некорректная дата :( Введите дату праздника в таком формате: ' .
                     date('d.m.Y')
                 )->send();
             } else {
@@ -55,7 +60,8 @@ class AddHolidayService
             }
         } else {
             $currentHoliday->update(['description' => $text]);
-            $chat->update(['waiting_add_answer' => false]);
+            $chat->waiting_add_answer = false;
+            $chat->save();
             $chat->message('Я всё записал, ожидайте напоминание ;)')->send();
         }
     }
