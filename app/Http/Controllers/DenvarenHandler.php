@@ -41,9 +41,9 @@ class DenvarenHandler extends WebhookHandler
     public function com(): void
     {
         Telegraph::registerBotCommands([
-            'list' => 'Список дат',
-            'add' => 'Добавить дату',
-            'delete' => 'Удалить дату',
+            'list' => 'Список напоминаний',
+            'add' => 'Добавить напоминание',
+            'delete' => 'Удалить напоминание',
         ])->send();
     }
 
@@ -53,7 +53,7 @@ class DenvarenHandler extends WebhookHandler
             ->where("chat_id", $this->chat->id)
             ->get();
         if ($holidays->isEmpty()) {
-            $this->reply('Не нашёл ни одной даты. Для добавления праздника используйте команду /add');
+            $this->reply('Не нашёл ни одного напоминания. Для добавления используйте команду /add');
         } else {
             $html = "Вот ваш список важных дат: \n\n";
             foreach ($holidays as $holiday) {
@@ -79,7 +79,7 @@ class DenvarenHandler extends WebhookHandler
         $holiday_id = $this->data->get('id');
         $result = $this->deleteHolidayService->deleteHolidayById($holiday_id, $chat_id);
         $result ?
-            $this->chat->message('Дата удалена')->send() :
-            $this->chat->message('Дата не найдена')->send();
+            $this->chat->message('Напоминание удалено')->send() :
+            $this->chat->message('Напоминание не найдено')->send();
     }
 }

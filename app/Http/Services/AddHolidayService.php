@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-use Adminer\PdoDb;
 use App\Models\Holiday;
 use Carbon\Carbon;
 use DefStudio\Telegraph\Models\TelegraphChat;
@@ -24,16 +23,16 @@ class AddHolidayService
             $holiday->save();
 
             $chat->html(
-                "Больше праздников - больше положительных эмоций!\n\nУкажите дату праздника в таком формате: "
+                "Больше праздников - больше положительных эмоций!\n\nУкажите дату напоминания в таком формате: "
                 . date('d.m.Y')
             )->send();
         } elseif (empty($newHoliday->date)) {
             $chat->message(
-                'Продолжим добавление праздника! Введите дату праздника в таком формате: ' .
+                'Продолжим добавление напоминания! Введите дату праздника в таком формате: ' .
                 date('d.m.Y')
             )->send();
         } else {
-            $chat->message('Продолжим добавление праздника! Введите описание праздника')->send();
+            $chat->message('Продолжим добавление напоминания! Введите описание праздника')->send();
         }
 
         $chat->waiting_add_answer = true;
@@ -46,12 +45,12 @@ class AddHolidayService
         if (empty($currentHoliday)) {
             $chat->message('Возникла непредвиденная ошибка :( Попробуйте заново')->send();
             Log::debug(
-                '[' . date('d.m.Y H:i:s') . '] Ошибка добавления праздника. ID чата: ' . $chat->id
+                '[' . date('d.m.Y H:i:s') . '] Ошибка добавления напоминания. ID чата: ' . $chat->id
             );
         } elseif (empty($currentHoliday->date)) {
             $date = Carbon::createFromFormat('d.m.Y', $text);
             if (empty($date)) {
-                $chat->message('Некорректная дата :( Введите дату праздника в таком формате: ' .
+                $chat->message('Некорректная дата :( Введите дату напоминания в таком формате: ' .
                     date('d.m.Y')
                 )->send();
             } else {
