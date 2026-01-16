@@ -37,20 +37,41 @@ class DeleteHolidayService
             if ($holidays->count() > 1) {
                 $buttons = [];
                 foreach ($holidays as $holiday) {
-                    $buttons[] = Button::make($holiday->description)->action('deleteById')->param('id', $holiday->id);
+                    $buttons[] = Button::make($holiday->description)
+                        ->action('deleteById')
+                        ->param('id', $holiday->id)
+                        ->param('chat_id', $chat->id);
                 }
                 Telegraph::message('Я обнаружил несколько праздников в эту дату, какой из них мне удалить?')
                     ->keyboard(Keyboard::make()->buttons([
                         $buttons
                     ])
                     )->send();
+            } elseif ($holidays->count() === 1) {
+                $holiday = $holidays->first();
+                Telegraph::message('Я обнаружил несколько праздников в эту дату, какой из них мне удалить?')
+                    ->keyboard(Keyboard::make()->row([
+                        Button::make('Да')
+                            ->action('deleteById')
+                            ->param('id', $holiday->id)
+                            ->param('chat_id', $chat->id),
+                        Button::make('Нет')
+                    ])
+                    )->send();
             } else {
-                $holidays->first()?->delete();
-                $chat->reply('Дата удалена');
+                $chat->message('Дата не найдена')->send();
             }
         }
 
         $chat->waiting_delete_answer = false;
         $chat->save();
+    }
+
+    public function deleteHolidayById(int $holiday_id, int $chat_id): bool
+    {
+        return Holiday::query()
+            ->where('id', $holiday_id)
+            ->where('chat_id', $chat_id)
+            ->delete();
     }
 }

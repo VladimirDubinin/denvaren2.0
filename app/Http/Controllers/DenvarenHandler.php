@@ -72,4 +72,14 @@ class DenvarenHandler extends WebhookHandler
     {
         $this->deleteHolidayService->startDeletingHoliday($this->chat);
     }
+
+    public function deleteById(): void
+    {
+        $chat_id = $this->data->get('chat_id');
+        $holiday_id = $this->data->get('id');
+        $result = $this->deleteHolidayService->deleteHolidayById($holiday_id, $chat_id);
+        $result ?
+            $this->chat->message('Дата удалена')->send() :
+            $this->chat->message('Дата не найдена')->send();
+    }
 }
