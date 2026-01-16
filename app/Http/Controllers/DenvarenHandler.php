@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chat;
-use App\Models\Holiday;
+use App\Http\Services\AddHolidayService;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 
 class DenvarenHandler extends WebhookHandler
 {
+    public function __construct(
+        private readonly AddHolidayService $addHolidayService
+    ) {
+        parent::__construct();
+    }
     protected function handleUnknownCommand($text): void
     {
         $this->chat->html('<b>Нет такой команды:</b> ' . $text)->send();
@@ -22,7 +26,7 @@ class DenvarenHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
-        $this->chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
+        $this->chat->html('"' . $text . '" - это то, что я так хотел услышать! ' . $this->chat->waiting_add_answer)->send();
     }
 
     public function com(): void
@@ -41,13 +45,7 @@ class DenvarenHandler extends WebhookHandler
 
     public function add(): void
     {
-        $chat = $this->chat;
-        $holiday = new Holiday();
-        $holiday->chat_id = $chat->id;
-        $chat->waiting_add_answer = true;
-        $chat->save();
-        $holiday->save();
-        $this->reply('Введите дату праздника');
+        $this->addHolidayService->addNewHoliday($this->chat);
     }
 
     public function delete(): void

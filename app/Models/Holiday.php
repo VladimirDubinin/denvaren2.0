@@ -40,6 +40,6 @@ class Holiday extends Model
      */
     public function chat(): HasOne
     {
-        return $this->hasOne(TelegraphChat::class, 'chat_id', 'chat_id');
+        return $this->hasOne(TelegraphChat::class, 'id', 'chat_id');
     }
 }
