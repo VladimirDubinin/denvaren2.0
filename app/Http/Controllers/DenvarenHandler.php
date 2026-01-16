@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\AddHolidayService;
+use App\Http\Services\DeleteHolidayService;
+use App\Models\Holiday;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
@@ -10,7 +12,8 @@ use Illuminate\Support\Stringable;
 class DenvarenHandler extends WebhookHandler
 {
     public function __construct(
-        private readonly AddHolidayService $addHolidayService
+        private readonly AddHolidayService $addHolidayService,
+        private readonly DeleteHolidayService $deleteHolidayService
     ) {
         parent::__construct();
     }
@@ -26,7 +29,13 @@ class DenvarenHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
-        $this->chat->html('"' . $text . '" - это то, что я так хотел услышать! ' . $this->chat->waiting_add_answer)->send();
+        if ($this->chat->waiting_add_answer) {
+            $this->addHolidayService->updateNewHoliday($this->chat, $text);
+        } elseif ($this->chat->waiting_delete_answer) {
+            $this->deleteHolidayService->deleteHoliday($this->chat, $text);
+        } else {
+            $this->chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
+        }
     }
 
     public function com(): void
@@ -40,16 +49,27 @@ class DenvarenHandler extends WebhookHandler
 
     public function list(): void
     {
-        $this->reply('Вывожу список дат...');
+        $holidays = Holiday::query()->where("chat_id", $this->chat->id)->get();
+        if ($holidays->isEmpty()) {
+            $this->reply('Не нашёл ни одной даты. Для добавления праздника используйте команду /add');
+        } else {
+            $html = 'Вот ваш список важных дат: <br><br>';
+            foreach ($holidays as $holiday) {
+                $html .= $holiday->date . ' - ' . $holiday->description . '<br>';
+            }
+            $this->chat->html($html)->send();
+        }
     }
 
     public function add(): void
     {
+        $this->chat->update(['waiting_add_answer' => true, 'waiting_delete_answer' => false]);
         $this->addHolidayService->addNewHoliday($this->chat);
     }
 
     public function delete(): void
     {
-        $this->reply('Удаляю дату...');
+        $this->chat->update(['waiting_delete_answer' => true, 'waiting_add_answer' => false]);
+        $this->reply('Укажите дату праздника, который хотите удалить');
     }
 }

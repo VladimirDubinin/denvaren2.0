@@ -2,59 +2,77 @@
 
 namespace App\Http\Services;
 
+use Adminer\PdoDb;
 use App\Models\Holiday;
+use Carbon\Carbon;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Stringable;
 
 class AddHolidayService
 {
     public function addNewHoliday(TelegraphChat $chat): void
     {
         // Смотрим, есть ли даты в процессе добавления
-        $newHoliday = Holiday::query()->where('chat_id', $chat->id)
-            ->where(function ($query) {
-                $query->whereNull('date')
-                    ->orWhereNull('description')
-                    ->orWhereNull('repeat');
-            })
-            ->orderBy('id', 'DESC')
-            ->first();
+        $newHoliday = $this->getCurrentHoliday($chat->id);
         // Если нет, создаём новую
         if (empty($newHoliday)) {
             $holiday = new Holiday();
             $holiday->chat_id = $chat->id;
             $holiday->save();
 
-            $chat->html('Отлично, больше праздников - больше положительных эмоций!<br><br>Укажите дату праздника')->send();
+            $chat->html(
+                'Больше праздников - больше положительных эмоций!<br><br>Укажите дату праздника в таком формате: '
+                . date('d.m.Y')
+            )->send();
         } elseif (empty($newHoliday->date)) {
-            $chat->message('Продолжим добавление праздника! Введите дату праздника')->send();
-        } elseif (empty($newHoliday->description)) {
-            $chat->message('Продолжим добавление праздника! Введите описание праздника')->send();
-        } elseif (empty($newHoliday->repeat)) {
-            $chat->message('Продолжим добавление праздника! Повторять ли уведомление каждый год?')->send();
+            $chat->message(
+                'Продолжим добавление праздника! Введите дату праздника в таком формате: ' .
+                date('d.m.Y')
+            )->send();
         } else {
-            $chat->message('Непредвиденная ошибка!')->send();
-            Log::debug(
-                '[' . date('d.m.Y H:i:s') . '] Ошибка добавления праздника ID: ' . $newHoliday->id
-            );
+            $chat->message('Продолжим добавление праздника! Введите описание праздника')->send();
         }
-
-        $chat->waiting_add_answer = true;
-        $chat->save();
     }
 
-    public function addHolidayDate(TelegraphChat $chat): void
+    public function updateNewHoliday(TelegraphChat $chat, Stringable $text): void
     {
-
+        $currentHoliday = $this->getCurrentHoliday($chat->id);
+        if (empty($currentHoliday)) {
+            $chat->message('Возникла непредвиденная ошибка :( Попробуйте заново')->send();
+            Log::debug(
+                '[' . date('d.m.Y H:i:s') . '] Ошибка добавления праздника. ID чата: ' . $chat->id
+            );
+        } elseif (empty($currentHoliday->date)) {
+            $date = Carbon::createFromFormat('d.m.Y', $text);
+            if (empty($date)) {
+                $chat->message('Некорректный формат даты :( Введите дату праздника в таком формате: ' .
+                    date('d.m.Y')
+                )->send();
+            } else {
+                $currentHoliday->update(['date' => $text]);
+                $chat->message('Окей, теперь добавьте описание праздника, чтобы я смог предложить хорошее поздравление')->send();
+            }
+        } else {
+            $currentHoliday->update(['description' => $text]);
+            $chat->update(['waiting_add_answer' => false]);
+            $chat->message('Я всё записал, ожидайте напоминание ;)')->send();
+        }
     }
 
-    public function addHolidayDesc(TelegraphChat $chat): void
+    private function getCurrentHoliday(int $chat_id): Holiday|null
     {
-
+        return Holiday::query()->where('chat_id', $chat_id)
+            ->where(function ($query) {
+                $query->whereNull('date')
+                    ->orWhereNull('description');
+            })
+            ->orderBy('id', 'DESC')
+            ->first();
     }
 
-    public function addHolidayRepeat(TelegraphChat $chat): void
+    private function dateCheck(string $date): Carbon|null
     {
-
+        return null;
     }
 }
