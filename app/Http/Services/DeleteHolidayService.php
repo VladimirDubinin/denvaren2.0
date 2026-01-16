@@ -16,7 +16,7 @@ class DeleteHolidayService
     {
         $chat->waiting_add_answer = false;
 
-        $chat->reply('Укажите дату праздника, который хотите удалить');
+        $chat->message('Укажите дату праздника, который хотите удалить')->send();
         $chat->waiting_delete_answer = true;
         $chat->save();
     }
