@@ -53,9 +53,9 @@ class DenvarenHandler extends WebhookHandler
         if ($holidays->isEmpty()) {
             $this->reply('Не нашёл ни одной даты. Для добавления праздника используйте команду /add');
         } else {
-            $html = 'Вот ваш список важных дат: <br><br>';
+            $html = "Вот ваш список важных дат: \n\n";
             foreach ($holidays as $holiday) {
-                $html .= $holiday->date . ' - ' . $holiday->description . '<br>';
+                $html .= $holiday->date->format('d.m.Y') . ' - ' . $holiday->description . "\n";
             }
             $this->chat->html($html)->send();
         }
