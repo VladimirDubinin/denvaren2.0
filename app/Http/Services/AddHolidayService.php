@@ -50,7 +50,7 @@ class AddHolidayService
                     date('d.m.Y')
                 )->send();
             } else {
-                $currentHoliday->update(['date' => $text]);
+                $currentHoliday->update(['date' => $date]);
                 $chat->message('Окей, теперь добавьте описание праздника, чтобы я смог предложить хорошее поздравление')->send();
             }
         } else {
@@ -69,10 +69,5 @@ class AddHolidayService
             })
             ->orderBy('id', 'DESC')
             ->first();
-    }
-
-    private function dateCheck(string $date): Carbon|null
-    {
-        return null;
     }
 }
