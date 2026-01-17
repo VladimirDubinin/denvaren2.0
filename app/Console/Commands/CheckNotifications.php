@@ -27,7 +27,10 @@ class CheckNotifications extends Command
      */
     public function handle()
     {
-        $holidays = Holiday::active()->where('date', '=', Carbon::now()->addDay())->get();
-        dd($holidays);
+        $now = Carbon::now();
+        // Отправляем простое уведомление в день события
+        $holidays = Holiday::active()->where('date', '=', $now->format('Y-m-d'))->get();
+        // Отправляем уведомление со сгенерированным поздравлением за день до события
+        $holidays = Holiday::active()->where('date', '=', $now->addDay()->format('Y-m-d'))->get();
     }
 }

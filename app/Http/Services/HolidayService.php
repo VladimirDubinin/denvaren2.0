@@ -106,9 +106,7 @@ class HolidayService
     public function deleteHoliday(TelegraphChat $chat, Stringable $text): void
     {
         if (!Carbon::canBeCreatedFromFormat('d.m.Y', $text)) {
-            $chat->message('Некорректная дата :( Введите дату напоминания в таком формате: ' .
-                date('d.m.Y')
-            )->send();
+            $chat->message('Некорректная дата :( Введите дату напоминания в таком формате "дд.мм.гггг"')->send();
         } else {
             $date = Carbon::createFromFormat('d.m.Y', $text);
             $holidays = Holiday::query()

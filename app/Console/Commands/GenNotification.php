@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class SendNotification extends Command
+class GenNotification extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'notification:send';
+    protected $signature = 'notification:gen';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Отправляет простое напоминание о событии в чат';
+    protected $description = 'Отправляет напоминание о событии со сгенерированным поздравлением';
 
     /**
      * Execute the console command.
