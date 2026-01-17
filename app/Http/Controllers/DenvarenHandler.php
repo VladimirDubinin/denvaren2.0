@@ -75,9 +75,8 @@ class DenvarenHandler extends WebhookHandler
 
     public function deleteById(): void
     {
-        $chat_id = $this->data->get('chat_id');
         $holiday_id = $this->data->get('id');
-        $result = $this->deleteHolidayService->deleteHolidayById($holiday_id, $chat_id);
+        $result = $this->deleteHolidayService->deleteHolidayById($holiday_id, $this->chat->id);
         $result ?
             $this->chat->message('Напоминание удалено')->send() :
             $this->chat->message('Напоминание не найдено')->send();

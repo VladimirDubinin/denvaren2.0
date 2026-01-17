@@ -39,22 +39,20 @@ class DeleteHolidayService
                 foreach ($holidays as $holiday) {
                     $buttons[] = Button::make($holiday->description)
                         ->action('deleteById')
-                        ->param('id', $holiday->id)
-                        ->param('chat_id', $chat->id);
+                        ->param('id', $holiday->id);
                 }
-                Telegraph::message('Я обнаружил несколько напоминаний в эту дату, какой из них мне удалить?')
+                $chat->message('Я обнаружил несколько напоминаний в эту дату, какой из них мне удалить?')
                     ->keyboard(Keyboard::make()->buttons([
                         $buttons
                     ])
                     )->send();
             } elseif ($holidays->count() === 1) {
                 $holiday = $holidays->first();
-                Telegraph::message('Вы уверены, что хотите удалить напоминание на ' . $holiday->date->format('d.m.Y') . '?')
+                $chat->message('Вы уверены, что хотите удалить напоминание на ' . $holiday->date->format('d.m.Y') . '?')
                     ->keyboard(Keyboard::make()->row([
                         Button::make('Да')
                             ->action('deleteById')
-                            ->param('id', $holiday->id)
-                            ->param('chat_id', $chat->id),
+                            ->param('id', $holiday->id),
                         Button::make('Нет')
                     ])
                     )->send();
