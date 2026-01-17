@@ -30,7 +30,7 @@ class DeleteHolidayService
             )->send();
         } else {
             $holidays = Holiday::query()
-                ->where('date', $date)
+                ->where('date', $date->format('Y-m-d'))
                 ->where('chat_id', $chat->id)
                 ->get();
 
