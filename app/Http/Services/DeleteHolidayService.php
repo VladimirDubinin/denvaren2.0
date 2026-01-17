@@ -35,26 +35,21 @@ class DeleteHolidayService
                 ->get();
 
             if ($holidays->count() > 1) {
-                $buttons = [];
+                $keyboard = Keyboard::make();
                 foreach ($holidays as $holiday) {
-                    $buttons[] = Button::make($holiday->description)
+                    $keyboard->button($holiday->description)
                         ->action('deleteById')
                         ->param('id', $holiday->id);
                 }
                 $chat->message('Я обнаружил несколько напоминаний в эту дату, какой из них мне удалить?')
-                    ->keyboard(Keyboard::make()->buttons([
-                        $buttons
-                    ])
-                    )->send();
+                    ->keyboard($keyboard)
+                    ->send();
             } elseif ($holidays->count() === 1) {
                 $holiday = $holidays->first();
                 $chat->message('Вы уверены, что хотите удалить напоминание на ' . $holiday->date->format('d.m.Y') . '?')
-                    ->keyboard(Keyboard::make()->row([
-                        Button::make('Да')
-                            ->action('deleteById')
-                            ->param('id', $holiday->id),
-                        Button::make('Нет')
-                    ])
+                    ->keyboard(Keyboard::make()
+                        ->button('Да')->action('deleteById')->param('id', $holiday->id)
+                        ->button('Нет')
                     )->send();
             } else {
                 $chat->message('Напоминание не найдено')->send();
