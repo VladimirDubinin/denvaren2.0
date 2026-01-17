@@ -29,12 +29,13 @@ class DenvarenHandler extends WebhookHandler
 
     protected function handleChatMessage(Stringable $text): void
     {
-        if ($this->chat->waiting_add_answer) {
-            $this->addHolidayService->updateNewHoliday($this->chat, $text);
-        } elseif ($this->chat->waiting_delete_answer) {
-            $this->deleteHolidayService->deleteHoliday($this->chat, $text);
+        $chat = $this->chat;
+        if ($chat->waiting_add_answer) {
+            $this->addHolidayService->updateNewHoliday($chat, $text);
+        } elseif ($chat->waiting_delete_answer) {
+            $this->deleteHolidayService->deleteHoliday($chat, $text);
         } else {
-            $this->chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
+            $chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
         }
     }
 
@@ -80,5 +81,12 @@ class DenvarenHandler extends WebhookHandler
         $result ?
             $this->chat->message('Напоминание удалено')->send() :
             $this->chat->message('Напоминание не найдено')->send();
+    }
+
+    public function stopDeleting(): void
+    {
+        if ($this->chat->waiting_delete_answer) {
+            $this->chat->message('Напоминание остаётся в силе!')->send();
+        }
     }
 }

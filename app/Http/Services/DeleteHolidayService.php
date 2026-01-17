@@ -49,7 +49,7 @@ class DeleteHolidayService
                 $chat->message('Вы уверены, что хотите удалить напоминание на ' . $holiday->date->format('d.m.Y') . '?')
                     ->keyboard(Keyboard::make()
                         ->button('Да')->action('deleteById')->param('id', $holiday->id)
-                        ->button('Нет')
+                        ->button('Нет')->action('stopDeleting')
                     )->send();
             } else {
                 $chat->message('Напоминание не найдено')->send();
