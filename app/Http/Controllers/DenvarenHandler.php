@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\AddHolidayService;
-use App\Http\Services\DeleteHolidayService;
 use App\Models\Holiday;
+use App\Http\Services\HolidayService;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
@@ -12,8 +11,7 @@ use Illuminate\Support\Stringable;
 class DenvarenHandler extends WebhookHandler
 {
     public function __construct(
-        private readonly AddHolidayService $addHolidayService,
-        private readonly DeleteHolidayService $deleteHolidayService
+        private readonly HolidayService $holidayService,
     ) {
         parent::__construct();
     }
@@ -31,9 +29,9 @@ class DenvarenHandler extends WebhookHandler
     {
         $chat = $this->chat;
         if ($chat->waiting_add_answer) {
-            $this->addHolidayService->updateNewHoliday($chat, $text);
+            $this->holidayService->updateNewHoliday($chat, $text);
         } elseif ($chat->waiting_delete_answer) {
-            $this->deleteHolidayService->deleteHoliday($chat, $text);
+            $this->holidayService->deleteHoliday($chat, $text);
         } else {
             $chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
         }
@@ -66,18 +64,18 @@ class DenvarenHandler extends WebhookHandler
 
     public function add(): void
     {
-        $this->addHolidayService->addNewHoliday($this->chat);
+        $this->holidayService->addNewHoliday($this->chat);
     }
 
     public function delete(): void
     {
-        $this->deleteHolidayService->startDeletingHoliday($this->chat);
+        $this->holidayService->startDeletingHoliday($this->chat);
     }
 
     public function deleteById(): void
     {
         $holiday_id = $this->data->get('id');
-        $result = $this->deleteHolidayService->deleteHolidayById($holiday_id, $this->chat->id);
+        $result = $this->holidayService->deleteHolidayById($holiday_id, $this->chat->id);
         $result ?
             $this->chat->message('Напоминание удалено')->send() :
             $this->chat->message('Напоминание не найдено')->send();
