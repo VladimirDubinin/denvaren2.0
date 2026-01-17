@@ -4,6 +4,8 @@ namespace App\Http\Services;
 
 use App\Models\Holiday;
 use Carbon\Carbon;
+use DefStudio\Telegraph\Keyboard\Button;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Stringable;
@@ -32,7 +34,14 @@ class AddHolidayService
                 date('d.m.Y')
             )->send();
         } else {
-            $chat->message('Продолжим добавление напоминания! Введите описание праздника')->send();
+            $chat->message(
+                'Продолжим добавление напоминания на ' . $newHoliday->date->format('d.m.Y') .
+                '! Введите описание праздника, либо удалите черновик и начните добавление заново'
+            )->keyboard(Keyboard::make()
+                ->button('Удалить')
+                ->action('deleteById')
+                ->param('id', $newHoliday->id)
+            )->send();
         }
 
         $chat->waiting_add_answer = true;
