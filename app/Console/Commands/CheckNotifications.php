@@ -29,8 +29,21 @@ class CheckNotifications extends Command
     {
         $now = Carbon::now();
         // Отправляем простое уведомление в день события
+        $this->info('Отправляю простые уведомления...');
         $holidays = Holiday::active()->where('date', '=', $now->format('Y-m-d'))->get();
+        $holidays->map(function ($holiday) {
+            $exitCode = $this->call('notification:simple', [
+                'id' => $holiday->id,
+            ]);
+            if ($exitCode !== self::SUCCESS) {
+                $this->error("Ошибка отправки простого уведомления по напоминанию {$holiday->id}, пропускаю");
+            }
+        });
+
         // Отправляем уведомление со сгенерированным поздравлением за день до события
-        $holidays = Holiday::active()->where('date', '=', $now->addDay()->format('Y-m-d'))->get();
+        //$this->info('Отправляю сгенерированные уведомления...');
+        //$holidays = Holiday::active()->where('date', '=', $now->addDay()->format('Y-m-d'))->get();
+
+        $this->info('Всё!');
     }
 }

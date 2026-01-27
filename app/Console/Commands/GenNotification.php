@@ -11,7 +11,7 @@ class GenNotification extends Command
      *
      * @var string
      */
-    protected $signature = 'notification:gen';
+    protected $signature = 'notification:gen {id : Holiday ID}';
 
     /**
      * The console command description.
