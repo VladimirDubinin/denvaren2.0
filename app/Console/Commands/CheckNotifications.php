@@ -25,7 +25,7 @@ class CheckNotifications extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $now = Carbon::now();
         // Отправляем простое уведомление в день события
@@ -41,8 +41,16 @@ class CheckNotifications extends Command
         });
 
         // Отправляем уведомление со сгенерированным поздравлением за день до события
-        //$this->info('Отправляю сгенерированные уведомления...');
-        //$holidays = Holiday::active()->where('date', '=', $now->addDay()->format('Y-m-d'))->get();
+        $this->info('Отправляю сгенерированные уведомления...');
+        $holidays = Holiday::active()->where('date', '=', $now->addDay()->format('Y-m-d'))->get();
+        $holidays->map(function ($holiday) {
+            $exitCode = $this->call('notification:gen', [
+                'id' => $holiday->id,
+            ]);
+            if ($exitCode !== self::SUCCESS) {
+                $this->error("Ошибка отправки сгенерированного празднования по напоминанию {$holiday->id}, пропускаю");
+            }
+        });
 
         $this->info('Всё!');
     }

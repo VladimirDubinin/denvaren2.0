@@ -26,7 +26,7 @@ class SimpleNotification extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         try {
             $holidayId = $this->argument('id');
