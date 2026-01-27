@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Services\ChatService;
 use App\Models\Holiday;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Console\Command;
@@ -34,15 +35,14 @@ class GenNotification extends Command
             $holiday = Holiday::query()->findOrFail($holidayId);
             $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
 
-            $input = "Ты - бот, который отправляет напоминания о важных событиях.
-            Завтра {$holiday->date->format('d.m.Y')}, а значит у твоего пользователя - {$holiday->description}.
+            $input = "Завтра {$holiday->date->format('d.m.Y')}, а значит у твоего пользователя - {$holiday->description}.
             Нужно написать напоминание и предложить вариант поздравления с праздником.";
-            $response = OpenAI::responses()->create([
-                'model' => 'gpt-5',
-                'input' => $input,
-            ]);
+            $response = ChatService::requestAI($input);
+            if (empty($response)) {
+                throw new \Exception('Ошибка AI');
+            }
 
-            $chat->message($response->outputText)->send();
+            $chat->message($response)->send();
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");
