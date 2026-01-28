@@ -35,14 +35,14 @@ class GenNotification extends Command
             $holiday = Holiday::query()->findOrFail($holidayId);
             $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
 
-            $input = "Завтра {$holiday->date->format('d.m.Y')}, а значит у твоего пользователя - {$holiday->description}.
-            Нужно написать напоминание и предложить вариант поздравления с праздником.";
+            $input = "Дата: {$holiday->date->format('d.m.Y')}, описание праздника: {$holiday->description}.
+            Предложи вариант поздравления.";
             $response = ChatService::requestAI($input);
             if (empty($response)) {
                 throw new \Exception('Ошибка AI: пустой ответ.');
             }
 
-            $chat->message($response)->send();
+            $chat->message("Завтра у тебя важная дата: - {$holiday->description}! Держи оригинальное поздравление с праздником: \n\n" . $response)->send();
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");

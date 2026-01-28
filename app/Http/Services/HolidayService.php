@@ -30,17 +30,17 @@ class HolidayService
             $holiday->save();
 
             $chat->html(
-                "Больше праздников - больше положительных эмоций!\n\nУкажите дату предстоящего события в таком формате \"дд.мм.гггг\""
+                "Больше праздников - больше положительных эмоций!\n\nУкажи дату предстоящего события в таком формате \"дд.мм.гггг\""
             )->send();
         } elseif (empty($newHoliday->date)) {
             $chat->message(
-                'Продолжим добавление напоминания! Введите дату предстоящего события в таком формате: ' .
+                'Продолжим добавление напоминания! Введи дату предстоящего события в таком формате: ' .
                 date('d.m.Y')
             )->send();
         } else {
             $chat->message(
                 'Продолжим добавление напоминания на ' . $newHoliday->date->format('d.m.Y') .
-                '! Введите описание события, либо удалите черновик и начните добавление заново'
+                '! Введи описание события, либо удали черновик и начни добавление заново'
             )->keyboard(Keyboard::make()
                 ->button('Удалить')
                 ->action('deleteById')
@@ -67,7 +67,7 @@ class HolidayService
             $currentHoliday->update(['description' => $text]);
             $chat->waiting_add_answer = false;
             $chat->save();
-            $chat->message('Я всё записал, ожидайте напоминание ;)')->send();
+            $chat->message('Я всё записал, ожидай напоминание ;)')->send();
         }
     }
 
@@ -79,10 +79,10 @@ class HolidayService
                 $result = 'Введённая дата не должна быть раньше ' . date('d.m.Y');
             } else {
                 $holiday->update(['date' => $date]);
-                $result = 'Окей, теперь добавьте описание праздника, чтобы я смог предложить хорошее поздравление';
+                $result = 'Окей, теперь добавь описание праздника, чтобы я смог предложить хорошее поздравление';
             }
         } else {
-            $result = 'Некорректная дата :( Введите дату напоминания в формате "дд.мм.гггг"';
+            $result = 'Некорректная дата :( Введи дату напоминания в формате "дд.мм.гггг"';
         }
 
         return $result;
@@ -106,7 +106,7 @@ class HolidayService
     public function deleteHoliday(TelegraphChat $chat, Stringable $text): void
     {
         if (!Carbon::canBeCreatedFromFormat('d.m.Y', $text)) {
-            $chat->message('Некорректная дата :( Введите дату напоминания в таком формате "дд.мм.гггг"')->send();
+            $chat->message('Некорректная дата :( Введи дату напоминания в таком формате "дд.мм.гггг"')->send();
         } else {
             $date = Carbon::createFromFormat('d.m.Y', $text);
             $holidays = Holiday::query()
@@ -121,12 +121,12 @@ class HolidayService
                         ->action('deleteById')
                         ->param('id', $holiday->id);
                 }
-                $chat->message('Я обнаружил несколько напоминаний в эту дату, какой из них мне удалить?')
+                $chat->message('Я обнаружил несколько напоминаний в эту дату, какое из них мне удалить?')
                     ->keyboard($keyboard)
                     ->send();
             } elseif ($holidays->count() === 1) {
                 $holiday = $holidays->first();
-                $chat->message('Вы уверены, что хотите удалить напоминание на ' . $holiday->date->format('d.m.Y') . '?')
+                $chat->message('Уверены, что день ' . $holiday->date->format('d.m.Y') . ' тебе больше не важен?')
                     ->keyboard(Keyboard::make()
                         ->button('Да')->action('deleteById')->param('id', $holiday->id)
                         ->button('Нет')->action('stopDeleting')

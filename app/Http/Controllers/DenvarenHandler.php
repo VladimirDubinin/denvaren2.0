@@ -33,7 +33,7 @@ class DenvarenHandler extends WebhookHandler
         } elseif ($chat->waiting_delete_answer) {
             $this->holidayService->deleteHoliday($chat, $text);
         } else {
-            $chat->html('"' . $text . '" - это то, что я так хотел услышать!')->send();
+            $chat->html("Извини, у меня нет времени на поболтать :( Воспользуйся одной из команд")->send();
         }
     }
 
@@ -52,7 +52,7 @@ class DenvarenHandler extends WebhookHandler
             ->where("chat_id", $this->chat->id)
             ->get();
         if ($holidays->isEmpty()) {
-            $this->reply('Не нашёл ни одного напоминания. Для добавления используйте команду /add');
+            $this->reply('Не нашёл ни одного напоминания. Для добавления используй команду /add');
         } else {
             $html = "Вот ваш список важных дат: \n\n";
             foreach ($holidays as $holiday) {
