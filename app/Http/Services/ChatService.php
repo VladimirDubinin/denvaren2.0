@@ -36,12 +36,13 @@ class ChatService
         curl_close($ch);
 
         $response = json_decode($result, true);
-        if (!empty($response)) {
+
+        try {
             return $response['choices'][0]['message']['content'];
-        } else {
-            Log::debug('[' . date('d.m.Y H:i:s') . ']' . print_r($response, true));
-            return null;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
 
+        return null;
     }
 }

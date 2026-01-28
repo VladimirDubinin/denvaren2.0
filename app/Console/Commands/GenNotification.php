@@ -39,14 +39,14 @@ class GenNotification extends Command
             Нужно написать напоминание и предложить вариант поздравления с праздником.";
             $response = ChatService::requestAI($input);
             if (empty($response)) {
-                throw new \Exception('Ошибка AI');
+                throw new \Exception('Ошибка AI: пустой ответ.');
             }
 
             $chat->message($response)->send();
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");
-            Log::debug($e->getTraceAsString());
+            Log::debug($e->getFile() . '.' . $e->getLine() . ': '. $e->getTraceAsString());
             return self::FAILURE;
         }
     }
