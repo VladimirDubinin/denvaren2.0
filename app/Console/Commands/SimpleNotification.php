@@ -32,7 +32,7 @@ class SimpleNotification extends Command
             $holidayId = $this->argument('id');
             $holiday = Holiday::query()->findOrFail($holidayId);
             $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
-            $chat->message("Сегодня {$holiday->date->format('d.m.Y')}, а значит - {$holiday->description}!")->send();
+            $chat->message("🗓Сегодня {$holiday->date->format('d.m.Y')}, а значит - {$holiday->description}🥳")->send();
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");

@@ -33,7 +33,7 @@ class DenvarenHandler extends WebhookHandler
         } elseif ($chat->waiting_delete_answer) {
             $this->holidayService->deleteHoliday($chat, $text);
         } else {
-            $chat->html("Извини, у меня нет времени на поболтать :( Воспользуйся одной из команд")->send();
+            $chat->html("Извини, у меня нет времени на поболтать😎 Воспользуйся одной из команд")->send();
         }
     }
 
@@ -52,9 +52,9 @@ class DenvarenHandler extends WebhookHandler
             ->where("chat_id", $this->chat->id)
             ->get();
         if ($holidays->isEmpty()) {
-            $this->reply('Не нашёл ни одного напоминания. Для добавления используй команду /add');
+            $this->reply('Не нашёл ни одного напоминания🤷‍♂️ Для добавления используй команду /add');
         } else {
-            $html = "Вот ваш список важных дат: \n\n";
+            $html = "Вот ваш список важных дат🤩 \n\n";
             foreach ($holidays as $holiday) {
                 $html .= $holiday->date->format('d.m.Y') . ' - ' . $holiday->description . "\n";
             }
@@ -77,14 +77,14 @@ class DenvarenHandler extends WebhookHandler
         $holiday_id = $this->data->get('id');
         $result = $this->holidayService->deleteHolidayById($holiday_id, $this->chat->id);
         $result ?
-            $this->chat->message('Напоминание удалено')->send() :
-            $this->chat->message('Напоминание не найдено')->send();
+            $this->chat->message('Напоминание удалено🥲')->send() :
+            $this->chat->message('Напоминание не найдено😢')->send();
     }
 
     public function stopDeleting(): void
     {
         if ($this->chat->waiting_delete_answer) {
-            $this->chat->message('Напоминание остаётся в силе!')->send();
+            $this->chat->message('Напоминание остаётся в силе💪')->send();
         }
     }
 }

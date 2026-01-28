@@ -42,7 +42,7 @@ class GenNotification extends Command
                 throw new \Exception('Ошибка AI: пустой ответ.');
             }
 
-            $chat->message("Завтра у тебя важная дата: - {$holiday->description}! Держи оригинальное поздравление с праздником: \n\n" . $response)->send();
+            $chat->message("Завтра у тебя важная дата - {$holiday->description}🎉\n Держи оригинальное поздравление с праздником🤝 \n\n" . $response)->send();
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");
