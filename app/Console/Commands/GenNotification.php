@@ -7,7 +7,6 @@ use App\Models\Holiday;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Laravel\Facades\OpenAI;
 
 class GenNotification extends Command
 {
