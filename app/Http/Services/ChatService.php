@@ -18,7 +18,7 @@ class ChatService
             "messages" => [
                 [
                     'role' => 'system',
-                    'content' => 'You are a Telegram bot that sends holiday reminders and offers the user a greeting option.'
+                    'content' => 'Ты телеграм бот, который отправляет уведомления о предстоящих событиях и предлагаешь вариант поздравления на русском языке.'
                 ],
                 [
                     'role' => 'user',
@@ -36,8 +36,8 @@ class ChatService
         curl_close($ch);
 
         $response = json_decode($result, true);
-        if (array_key_exists('message', $response)) {
-            return $response['message']['content'];
+        if (!empty($response)) {
+            return $response['choices'][0]['message']['content'];
         } else {
             Log::debug('[' . date('d.m.Y H:i:s') . ']' . print_r($response, true));
             return null;
