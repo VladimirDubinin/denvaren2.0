@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('holidays', function (Blueprint $table) {
+        Schema::table('holidays', function (Blueprint $table) {
             $table->tinyInteger('repeat')->default(false)->nullable()->comment('Повторять уведомление каждый год')->change();
         });
     }
