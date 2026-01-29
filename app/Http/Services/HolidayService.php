@@ -57,7 +57,7 @@ class HolidayService
         $currentHoliday = $this->getCurrentHoliday($chat->id);
         if (empty($currentHoliday)) {
             $chat->message('Возникла непредвиденная ошибка :( Попробуйте заново')->send();
-            Log::debug(
+            Log::error(
                 '[' . date('d.m.Y H:i:s') . '] Ошибка добавления напоминания. ID чата: ' . $chat->id
             );
         } elseif (empty($currentHoliday->date)) {
@@ -65,9 +65,15 @@ class HolidayService
             $chat->message($result)->send();
         } else {
             $currentHoliday->update(['description' => $text]);
+            $chat->message('Повторять напоминание каждый год?')->keyboard(Keyboard::make()
+                ->button('Каждый год')->action('setRepeating')
+                ->param('id', $currentHoliday->id)->param('repeat', true)
+                ->button('Однократно')->action('setRepeating')
+                ->param('id', $currentHoliday->id)->param('repeat', false)
+                ->chunk(2)
+            )->send();
             $chat->waiting_add_answer = false;
             $chat->save();
-            $chat->message('Я всё записал, ожидай напоминание ;)')->send();
         }
     }
 
@@ -157,5 +163,12 @@ class HolidayService
             })
             ->orderBy('id', 'DESC')
             ->first();
+    }
+
+    public function setHolidayRepeating(int $chat_id, int $holiday_id, bool $repeating): void
+    {
+        Holiday::query()->where('chat_id', $chat_id)
+            ->where('id', $holiday_id)
+            ->update(['repeat' => $repeating]);
     }
 }

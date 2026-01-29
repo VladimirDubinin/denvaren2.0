@@ -6,6 +6,7 @@ use App\Models\Holiday;
 use App\Http\Services\HolidayService;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Stringable;
 
 class DenvarenHandler extends WebhookHandler
@@ -17,12 +18,16 @@ class DenvarenHandler extends WebhookHandler
     }
     protected function handleUnknownCommand($text): void
     {
-        $this->chat->html('<b>Нет такой команды:</b> ' . $text)->send();
+        $this->chat->html('<b>Нет такой команды:</b> ' . $text . ' 🙃')->send();
     }
 
     public function start(): void
     {
-        $this->reply('Приветствую нового пользователя!');
+        $this->chat->message('Вот, что я умею:')->keyboard(Keyboard::make()
+            ->button('Добавить напоминание')->action('add')
+            ->button('Удалить напоминание')->action('delete')
+            ->button('Список напоминаний')->action('list')
+        )->send();
     }
 
     protected function handleChatMessage(Stringable $text): void
@@ -86,5 +91,14 @@ class DenvarenHandler extends WebhookHandler
         if ($this->chat->waiting_delete_answer) {
             $this->chat->message('Напоминание остаётся в силе💪')->send();
         }
+    }
+
+    public function setRepeating(): void
+    {
+        $holiday_id = $this->data->get('id');
+        $repeating = $this->data->get('repeat');
+        $this->holidayService->setHolidayRepeating($this->chat->id, $holiday_id, $repeating);
+        Telegraph::deleteKeyboard(messageId: $this->messageId)->send();
+        $this->chat->message('Я всё записал, ожидай напоминание 😉')->send();
     }
 }

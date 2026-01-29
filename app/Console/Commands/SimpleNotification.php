@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Services\HolidayService;
 use App\Models\Holiday;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Console\Command;
@@ -26,13 +27,22 @@ class SimpleNotification extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(HolidayService $holidayService): int
     {
         try {
             $holidayId = $this->argument('id');
             $holiday = Holiday::query()->findOrFail($holidayId);
             $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
             $chat->message("🗓Сегодня {$holiday->date->format('d.m.Y')}, а значит - {$holiday->description}🥳")->send();
+
+            if ($holiday->repeat) {
+                $holiday->update([
+                   'date' =>  $holiday->date->addYear()
+                ]);
+            } else {
+                $holidayService->deleteHolidayById($holidayId, $chat->id);
+            }
+
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");
