@@ -79,7 +79,7 @@ class HolidayService
 
     private function setDate(Holiday $holiday, Stringable $text): string
     {
-        if (Carbon::canBeCreatedFromFormat('d.m.Y', $text)) {
+        if (Carbon::canBeCreatedFromFormat($text,'d.m.Y')) {
             $date = Carbon::createFromFormat('d.m.Y', $text);
             if ($date < Carbon::now()) {
                 $result = 'Введённая дата не должна быть раньше ' . date('d.m.Y');
@@ -111,7 +111,7 @@ class HolidayService
 
     public function deleteHoliday(TelegraphChat $chat, Stringable $text): void
     {
-        if (!Carbon::canBeCreatedFromFormat('d.m.Y', $text)) {
+        if (!Carbon::canBeCreatedFromFormat($text, 'd.m.Y')) {
             $chat->message('Некорректная дата :( Введи дату напоминания в таком формате "дд.мм.гггг"')->send();
         } else {
             $date = Carbon::createFromFormat('d.m.Y', $text);
