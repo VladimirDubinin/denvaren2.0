@@ -27,7 +27,9 @@ class SetWebhook extends Command
     public function handle()
     {
         $token = config('telegram.bot_token');
+        $url = config('telegram.url');
         Http::post("https://api.telegram.org/bot{$token}/setWebhook", [
+            "url" => $url,
             "secret_token" => config('telegram.secret_token'),
             "max_connections" => config('telegram.max_connections'),
             "allowed_updates" => ["message","callback_query","chat_member","my_chat_member"]
