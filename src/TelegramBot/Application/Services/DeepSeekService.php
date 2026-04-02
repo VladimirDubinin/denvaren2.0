@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Services;
+namespace Src\TelegramBot\Application\Services;
 
-use Illuminate\Support\Facades\Log;
-
-class ChatService
+final readonly class DeepSeekService
 {
-    public static function requestAI(string $input)
+    public function requestAI(string $input)
     {
-        $apiKey = env('OPENROUTER_API_KEY');
+        $apiKey = config('telegram.openrouter_api_key');
         $headers = [
             "Authorization: Bearer {$apiKey}",
             "Content-Type: application/json",
         ];
         $body = json_encode([
-            "model" => env('OPENROUTER_MODEL'),
+            "model" => config('telegram.openrouter_model'),
             "messages" => [
                 [
                     'role' => 'system',
@@ -40,7 +38,11 @@ class ChatService
         try {
             return $response['choices'][0]['message']['content'];
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+            $token = config('telegram.bot_token');
+            \Illuminate\Support\Facades\Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                'chat_id' => 1752193570,
+                'text' => $e->getMessage() . PHP_EOL . $e->getTraceAsString(),
+            ]);
         }
 
         return null;

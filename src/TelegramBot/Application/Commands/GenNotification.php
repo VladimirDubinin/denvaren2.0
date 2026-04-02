@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Src\TelegramBot\Application\Commands;
 
-use App\Http\Services\ChatService;
-use App\Models\Holiday;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Src\TelegramBot\Application\Services\ChatService;
+use Src\TelegramBot\Domain\Models\Holiday;
 
 class GenNotification extends Command
 {

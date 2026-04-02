@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Src\TelegramBot\Application\Commands;
 
-use App\Http\Services\ChatService;
 use Illuminate\Console\Command;
+use Src\TelegramBot\Application\Services\ChatService;
+use Src\TelegramBot\Infrastructure\Facades\DeepSeek;
 
 class AIRequest extends Command
 {
@@ -27,7 +28,7 @@ class AIRequest extends Command
     public function handle(): void
     {
         $request = $this->argument('input');
-        $response = ChatService::requestAI($request);
+        $response = DeepSeek::requestAI($request);
         $this->info($response);
     }
 }

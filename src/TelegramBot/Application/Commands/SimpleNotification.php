@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Src\TelegramBot\Application\Commands;
 
-use App\Http\Services\HolidayService;
-use App\Models\Holiday;
-use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Src\TelegramBot\Domain\Models\Holiday;
+use Src\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 
 class SimpleNotification extends Command
 {
@@ -27,7 +26,7 @@ class SimpleNotification extends Command
     /**
      * Execute the console command.
      */
-    public function handle(HolidayService $holidayService): int
+    public function handle(HolidayRepository $holidayService): int
     {
         try {
             $holidayId = $this->argument('id');

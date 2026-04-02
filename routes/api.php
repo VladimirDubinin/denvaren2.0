@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Src\TelegramBot\Application\Controllers\WebhookController;
 
-Route::post('/telegram/webhook');
+Route::post('/telegram/webhook', WebhookController::class);

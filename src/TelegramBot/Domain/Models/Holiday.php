@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace Src\TelegramBot\Domain\Models;
 
 use DefStudio\Telegraph\Models\TelegraphChat;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -41,10 +41,10 @@ class Holiday extends Model
     /**
      * @return HasOne
      */
-    public function chat(): HasOne
+    /*public function chat(): HasOne
     {
         return $this->hasOne(TelegraphChat::class, 'id', 'chat_id');
-    }
+    }*/
 
     public function scopeActive($query)
     {

@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Src\TelegramBot\Application\Controllers;
 
-use App\Models\Holiday;
-use App\Http\Services\HolidayService;
-use DefStudio\Telegraph\Facades\Telegraph;
-use DefStudio\Telegraph\Handlers\WebhookHandler;
-use DefStudio\Telegraph\Keyboard\Keyboard;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Stringable;
+use Src\Application\Controllers\Keyboard;
+use Src\Application\Controllers\Telegraph;
+use Src\TelegramBot\Domain\Models\Holiday;
+use Src\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 
-class DenvarenHandler extends WebhookHandler
+class DenvarenHandler extends Controller
 {
     public function __construct(
-        private readonly HolidayService $holidayService,
+        private readonly HolidayRepository $holidayService,
     ) {
-        parent::__construct();
     }
     protected function handleUnknownCommand($text): void
     {
