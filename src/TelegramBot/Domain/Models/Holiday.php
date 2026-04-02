@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Domain\Models;
+namespace App\TelegramBot\Domain\Models;
 
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Database\Eloquent\Builder;

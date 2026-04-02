@@ -1,11 +1,11 @@
 <?php
 
-namespace Src\TelegramBot\Application\Controllers;
+namespace App\TelegramBot\Application\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Src\TelegramBot\Infrastructure\Facades\Telegram;
+use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final class WebhookController extends Controller
 {

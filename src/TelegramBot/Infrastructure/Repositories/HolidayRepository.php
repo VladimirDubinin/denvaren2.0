@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Infrastructure\Repositories;
+namespace App\TelegramBot\Infrastructure\Repositories;
 
 class HolidayRepository
 {

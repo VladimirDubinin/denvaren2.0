@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Application\Services;
+namespace App\TelegramBot\Application\Services;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;

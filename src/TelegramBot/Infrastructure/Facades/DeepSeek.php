@@ -1,9 +1,9 @@
 <?php
 
-namespace Src\TelegramBot\Infrastructure\Facades;
+namespace App\TelegramBot\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Src\TelegramBot\Application\Services\DeepSeekService;
+use App\TelegramBot\Application\Services\DeepSeekService;
 
 class DeepSeek extends Facade
 {

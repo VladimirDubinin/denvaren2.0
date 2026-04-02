@@ -1,13 +1,13 @@
 <?php
 
-namespace Src\TelegramBot\Application\Controllers;
+namespace App\TelegramBot\Application\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Stringable;
-use Src\Application\Controllers\Keyboard;
-use Src\Application\Controllers\Telegraph;
-use Src\TelegramBot\Domain\Models\Holiday;
-use Src\TelegramBot\Infrastructure\Repositories\HolidayRepository;
+use App\Application\Controllers\Keyboard;
+use App\Application\Controllers\Telegraph;
+use App\TelegramBot\Domain\Models\Holiday;
+use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 
 class DenvarenHandler extends Controller
 {

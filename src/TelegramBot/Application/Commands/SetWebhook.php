@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Application\Commands;
+namespace App\TelegramBot\Application\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Src\TelegramBot\Infrastructure\Facades;
+namespace App\TelegramBot\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Src\TelegramBot\Application\Services\TelegramService;
+use App\TelegramBot\Application\Services\TelegramService;
 
 /**
  * @method static string report(string $message)

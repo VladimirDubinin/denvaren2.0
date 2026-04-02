@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\TelegramBot\Application\Commands;
+namespace App\TelegramBot\Application\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Src\TelegramBot\Domain\Models\Holiday;
+use App\TelegramBot\Domain\Models\Holiday;
 
 class CheckNotifications extends Command
 {

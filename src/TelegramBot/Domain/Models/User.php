@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Domain\Models;
+namespace App\TelegramBot\Domain\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;

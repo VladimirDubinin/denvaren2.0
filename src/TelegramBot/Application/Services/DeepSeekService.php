@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\TelegramBot\Application\Services;
+namespace App\TelegramBot\Application\Services;
 
 final readonly class DeepSeekService
 {
