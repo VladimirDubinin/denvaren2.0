@@ -1,8 +1,7 @@
 <?php
 
-namespace App\TelegramBot\Application\Commands\Console;
+namespace App\TelegramBot\Application\ConsoleCommands;
 
-use App\TelegramBot\Application\Commands\TelegraphChat;
 use App\TelegramBot\Domain\Models\Holiday;
 use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 use Illuminate\Console\Command;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\TelegramBot\Application\Commands\Console;
+namespace App\TelegramBot\Application\ConsoleCommands;
 
 use App\TelegramBot\Application\Services\ChatService;
 use App\TelegramBot\Infrastructure\Facades\DeepSeek;

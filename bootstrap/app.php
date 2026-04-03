@@ -20,12 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withCommands(
         [
-            \App\TelegramBot\Application\Commands\Console\SetWebhook::class,
-            \App\TelegramBot\Application\Commands\Console\SetMyCommands::class,
-            \App\TelegramBot\Application\Commands\Console\AIRequest::class,
-            \App\TelegramBot\Application\Commands\Console\CheckNotifications::class,
-            \App\TelegramBot\Application\Commands\Console\GenNotification::class,
-            \App\TelegramBot\Application\Commands\Console\SimpleNotification::class
+            \App\TelegramBot\Application\ConsoleCommands\SetWebhook::class,
+            \App\TelegramBot\Application\ConsoleCommands\SetMyCommands::class,
+            \App\TelegramBot\Application\ConsoleCommands\AIRequest::class,
+            \App\TelegramBot\Application\ConsoleCommands\CheckNotifications::class,
+            \App\TelegramBot\Application\ConsoleCommands\GenNotification::class,
+            \App\TelegramBot\Application\ConsoleCommands\SimpleNotification::class
         ]
     )
     ->withExceptions(function (Exceptions $exceptions): void {
