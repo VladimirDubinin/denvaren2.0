@@ -10,6 +10,6 @@ final readonly class CommandHandleUseCase
     public function execute(Chat $chat, string $text): void
     {
         //TODO: сделать реализацию команд
-        Telegram::send($text, $chat->telegram_id);
+        Telegram::sendMessage($text, $chat->telegram_id);
     }
 }

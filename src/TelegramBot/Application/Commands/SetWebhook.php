@@ -2,8 +2,9 @@
 
 namespace App\TelegramBot\Application\Commands;
 
+use App\TelegramBot\Infrastructure\Facades\Telegram;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 
 class SetWebhook extends Command
 {
@@ -23,13 +24,13 @@ class SetWebhook extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws ConnectionException
      */
-    public function handle()
+    public function handle(): void
     {
-        $token = config('telegram.bot_token');
         $url = config('telegram.url');
-        Http::post("https://api.telegram.org/bot{$token}/setWebhook", [
-            "url" => $url,
+        Telegram::setWebhook($url, [
             "secret_token" => config('telegram.secret_token'),
             "max_connections" => config('telegram.max_connections'),
             "allowed_updates" => ["message","callback_query","chat_member","my_chat_member"]

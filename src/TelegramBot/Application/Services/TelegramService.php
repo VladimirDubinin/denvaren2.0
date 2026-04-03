@@ -11,13 +11,38 @@ final readonly class TelegramService
     /**
      * @throws ConnectionException
      */
-    public function send(string $message, int $chatId = 1752193570): void
+    private function request(string $method, array $payload = []): void
     {
         $token = config('telegram.bot_token');
-        Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-            'chat_id' => $chatId,
+        Http::post("https://api.telegram.org/bot{$token}/{$method}", $payload);
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function sendMessage(string $message, ?int $chatId = null): void
+    {
+        $this->request(__FUNCTION__, [
+            'chat_id' => $chatId ?? config('telegram.chat_id'),
             'text' => $message
         ]);
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function setWebhook(string $url, array $options = []): void
+    {
+        $payload = array_merge([$url], $options);
+        $this->request(__FUNCTION__, $payload);
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function setMyCommands(array $commands): void
+    {
+        $this->request(__FUNCTION__, ['commands' => $commands]);
     }
 
     public function chat(array $chatData): Chat
@@ -33,6 +58,11 @@ final readonly class TelegramService
             ]
         );
     }
+
+     public function registerBotCommands(array $commands): void
+     {
+
+     }
 
     public function isCommand(array $entities = []): bool
     {

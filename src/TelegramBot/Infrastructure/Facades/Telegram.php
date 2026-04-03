@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Facade;
 use App\TelegramBot\Application\Services\TelegramService;
 
 /**
- * @method static string report(string $message)
+ * @method static string sendMessage(string $message, ?int $chatId)
+ * @method static string setWebhook(string $url, array $options = [])
+ * @method static string setMyCommands(array $commands)
  * @method static string chat(array $chatData)
  * @method static string isCommand(array $entities)
  */

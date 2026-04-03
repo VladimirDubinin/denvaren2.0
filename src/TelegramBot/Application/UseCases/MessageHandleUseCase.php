@@ -10,6 +10,6 @@ final readonly class MessageHandleUseCase
     public function execute(Chat $chat, string $text): void
     {
         //TODO: сделать реализацию ответа на сообщения
-        Telegram::send($text, $chat->telegram_id);
+        Telegram::sendMessage($text, $chat->telegram_id);
     }
 }

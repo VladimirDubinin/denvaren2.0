@@ -40,7 +40,7 @@ final readonly class DeepSeekService
         try {
             return $response['choices'][0]['message']['content'];
         } catch (\Exception $e) {
-            Telegram::send($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+            Telegram::sendMessage($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
 
         return null;
