@@ -5,6 +5,7 @@ namespace App\TelegramBot\Domain\Models;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -39,12 +40,12 @@ class Holiday extends Model
     ];
 
     /**
-     * @return HasOne
+     * @return BelongsTo
      */
-    /*public function chat(): HasOne
+    public function chat(): BelongsTo
     {
-        return $this->hasOne(TelegraphChat::class, 'id', 'chat_id');
-    }*/
+        return $this->belongsTo(Chat::class, 'chat_id', 'id');
+    }
 
     public function scopeActive($query)
     {

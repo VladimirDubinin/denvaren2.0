@@ -2,28 +2,25 @@
 
 namespace App\TelegramBot\Application\Controllers;
 
-use Illuminate\Http\Request;
+use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final class WebhookController extends Controller
 {
-    private array $message;
-
-    public function __construct(Request $request)
-    {
-        $this->message = $request->input('message');
-    }
-
     /**
      * Точка входа в телеграм-бота
      *
+     * @param TelegramRequestDTO $requestDTO
      * @return void
      */
-    public function __invoke(): void
+    public function __invoke(TelegramRequestDTO $requestDTO): void
     {
-        Log::debug($this->message);
-        Telegram::report('Hello, World!');
+        if (config('app.debug')) {
+            Log::debug(print_r($requestDTO->all(), true));
+        }
+
+        $chat = Telegram::chat($requestDTO->message->chat);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\TelegramBot\Application\Services;
 
+use App\TelegramBot\Infrastructure\Facades\Telegram;
+
 final readonly class DeepSeekService
 {
     public function requestAI(string $input)
@@ -38,11 +40,7 @@ final readonly class DeepSeekService
         try {
             return $response['choices'][0]['message']['content'];
         } catch (\Exception $e) {
-            $token = config('telegram.bot_token');
-            \Illuminate\Support\Facades\Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-                'chat_id' => 1752193570,
-                'text' => $e->getMessage() . PHP_EOL . $e->getTraceAsString(),
-            ]);
+            Telegram::send($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
 
         return null;
