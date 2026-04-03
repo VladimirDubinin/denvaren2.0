@@ -2,7 +2,6 @@
 
 namespace App\TelegramBot\Application\Services;
 
-use App\TelegramBot\Application\Request\DTO\TelegramChatRequestDTO;
 use App\TelegramBot\Domain\Models\Chat;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -33,5 +32,12 @@ final readonly class TelegramService
                 'last_name' => $chatData['last_name'] ?? '',
             ]
         );
+    }
+
+    public function isCommand(array $entities = []): bool
+    {
+        return !empty($entities)
+            && isset($entities[0]['type'])
+            && $entities[0]['type'] === 'bot_command';
     }
 }
