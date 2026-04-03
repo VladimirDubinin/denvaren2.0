@@ -1,11 +1,12 @@
 <?php
 
-namespace App\TelegramBot\Application\Commands;
+namespace App\TelegramBot\Application\Commands\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
+use App\TelegramBot\Application\Commands\TelegraphChat;
 use App\TelegramBot\Domain\Models\Holiday;
 use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class SimpleNotification extends Command
 {

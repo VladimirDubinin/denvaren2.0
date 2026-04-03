@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Console\Scheduling\Schedule;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,11 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withCommands(
         [
-            \App\TelegramBot\Application\Commands\AIRequest::class,
-            \App\TelegramBot\Application\Commands\SetWebhook::class,
-            \App\TelegramBot\Application\Commands\CheckNotifications::class,
-            \App\TelegramBot\Application\Commands\GenNotification::class,
-            \App\TelegramBot\Application\Commands\SimpleNotification::class
+            \App\TelegramBot\Application\Commands\Console\SetWebhook::class,
+            \App\TelegramBot\Application\Commands\Console\SetMyCommands::class,
+            \App\TelegramBot\Application\Commands\Console\AIRequest::class,
+            \App\TelegramBot\Application\Commands\Console\CheckNotifications::class,
+            \App\TelegramBot\Application\Commands\Console\GenNotification::class,
+            \App\TelegramBot\Application\Commands\Console\SimpleNotification::class
         ]
     )
     ->withExceptions(function (Exceptions $exceptions): void {

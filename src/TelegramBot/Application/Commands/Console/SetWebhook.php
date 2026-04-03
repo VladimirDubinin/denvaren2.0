@@ -1,6 +1,6 @@
 <?php
 
-namespace App\TelegramBot\Application\Commands;
+namespace App\TelegramBot\Application\Commands\Console;
 
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 use Illuminate\Console\Command;

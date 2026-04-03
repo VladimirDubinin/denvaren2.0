@@ -1,10 +1,10 @@
 <?php
 
-namespace App\TelegramBot\Application\Commands;
+namespace App\TelegramBot\Application\Commands\Console;
 
-use Illuminate\Console\Command;
 use App\TelegramBot\Application\Services\ChatService;
 use App\TelegramBot\Infrastructure\Facades\DeepSeek;
+use Illuminate\Console\Command;
 
 class AIRequest extends Command
 {
