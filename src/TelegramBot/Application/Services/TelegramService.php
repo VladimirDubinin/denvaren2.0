@@ -21,16 +21,16 @@ final readonly class TelegramService
         ]);
     }
 
-    public function chat(TelegramChatRequestDTO $chatDTO): Chat
+    public function chat(array $chatData): Chat
     {
         return Chat::query()->updateOrCreate(
             [
-                'telegram_id' => $chatDTO->id,
-                'username' => $chatDTO->id,
+                'telegram_id' => $chatData['id'],
+                'username' => $chatData['username'],
             ],
             [
-                'first_name' => $chatDTO->firstName,
-                'last_name' => $chatDTO->lastName,
+                'first_name' => $chatData['first_name'] ?? '',
+                'last_name' => $chatData['last_name'] ?? '',
             ]
         );
     }
