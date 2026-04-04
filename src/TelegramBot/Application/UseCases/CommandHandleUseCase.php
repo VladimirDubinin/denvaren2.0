@@ -21,13 +21,11 @@ final readonly class CommandHandleUseCase
         } catch (UnknownCommandException $e) {
             Telegram::sendMessage($e->getMessage(), $chatId);
         }
-
-        //TODO: сделать реализацию команд
     }
 
     private function prepareCommandName(string &$text): void
     {
-        $text = preg_replace('[^a-zA-Z\s]', '', $text);
+        $text = preg_replace('/[^a-zA-Z0-9]/', '', $text);
         $text = ucfirst($text);
     }
 }
