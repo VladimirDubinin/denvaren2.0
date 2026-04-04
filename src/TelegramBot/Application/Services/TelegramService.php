@@ -59,10 +59,10 @@ final readonly class TelegramService
         );
     }
 
-    public function isCommand(array|null $entities): bool
+    public function isCommand(array|null $message): bool
     {
-        return !empty($entities)
-            && isset($entities[0]['type'])
-            && $entities[0]['type'] === 'bot_command';
+        return !empty($message)
+            && isset($message['entities'][0]['type'])
+            && $message['entities'][0]['type'] === 'bot_command';
     }
 }
