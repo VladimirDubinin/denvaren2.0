@@ -3,7 +3,7 @@
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
 use App\TelegramBot\Infrastructure\Facades\Telegram;
-use App\TelegramBot\Infrastructure\TelegramCommands\TelegramCommandInterface;
+use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 
 final class DeleteCommand implements TelegramCommandInterface
 {

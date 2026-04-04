@@ -3,7 +3,7 @@
 namespace App\TelegramBot\Application\TelegramCommands;
 
 use App\TelegramBot\Domain\Exceptions\UnknownCommandException;
-use App\TelegramBot\Infrastructure\TelegramCommands\TelegramCommandInterface;
+use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 
 final class CommandManager
 {
@@ -14,7 +14,7 @@ final class CommandManager
     {
         $commandClass = __NAMESPACE__ . '\\Commands\\' . $command . 'Command';
         if (!class_exists($commandClass)) {
-            throw new UnknownCommandException("Нет такой команды: {$command} 🙃");
+            throw UnknownCommandException::unknownCommand($command);
         }
         return new $commandClass;
     }

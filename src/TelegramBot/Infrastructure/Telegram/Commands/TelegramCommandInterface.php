@@ -1,6 +1,6 @@
 <?php
 
-namespace App\TelegramBot\Infrastructure\TelegramCommands;
+namespace App\TelegramBot\Infrastructure\Telegram\Commands;
 
 interface TelegramCommandInterface
 {

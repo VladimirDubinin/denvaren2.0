@@ -3,11 +3,15 @@
 namespace App\TelegramBot\Application\Services;
 
 use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 final readonly class TelegramService
 {
+    private string $message;
+    private array $replyMarkup;
+
     /**
      * @throws ConnectionException
      */
@@ -45,6 +49,12 @@ final readonly class TelegramService
         $this->request(__FUNCTION__, ['commands' => $commands]);
     }
 
+    /**
+     * Создает или обновляет данные чата из запроса
+     *
+     * @param array $chatData
+     * @return Chat
+     */
     public function chat(array $chatData): Chat
     {
         return Chat::query()->updateOrCreate(
@@ -59,10 +69,42 @@ final readonly class TelegramService
         );
     }
 
+    /**
+     * Проверяет, является ли сообщение от бота командой
+     *
+     * @param array|null $message
+     * @return bool
+     */
     public function isCommand(array|null $message): bool
     {
         return !empty($message)
             && isset($message['entities'][0]['type'])
             && $message['entities'][0]['type'] === 'bot_command';
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function keyboard(Keyboard $keyboard): self
+    {
+        $this->replyMarkup[] = $keyboard->toArray();
+        return $this;
+    }
+
+    public function send(int $chatId): void
+    {
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $this->message
+        ];
+
+        if (count($this->replyMarkup) > 0) {
+            $payload['reply_markup'] = $this->replyMarkup;
+        }
+
+        $this->request('sendMessage', $payload);
     }
 }

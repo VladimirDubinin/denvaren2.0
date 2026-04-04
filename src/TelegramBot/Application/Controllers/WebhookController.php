@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\Controllers;
 
 use App\TelegramBot\Application\UseCases\MessageHandleUseCase;
@@ -11,32 +13,31 @@ use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final class WebhookController extends Controller
 {
-    private array $message;
-
     public function __construct(
         private readonly MessageHandleUseCase $messageHandleUseCase,
         private readonly CommandHandleUseCase $commandHandleUseCase,
-        Request $request
     ) {
-        if (config('app.debug')) {
-            Log::debug(print_r($request->all(), true));
-        }
-        $this->message = $request->input('message');
     }
 
     /**
      * Точка входа в телеграм-бота
      *
+     * @param Request $request
      * @return void
      */
-    public function __invoke(): void
+    public function __invoke(Request $request): void
     {
-        $chat = Telegram::chat($this->message['chat']);
+        if (config('app.debug')) {
+            Log::debug(print_r($request->all(), true));
+        }
 
-        if (Telegram::isCommand($this->message)) {
-            $this->commandHandleUseCase->execute($chat->telegram_id, $this->message['text']);
+        $message = $request->input('message');
+        $chat = Telegram::chat($message['chat']);
+
+        if (Telegram::isCommand($message)) {
+            $this->commandHandleUseCase->execute($chat->telegram_id, $message['text']);
         } else {
-            $this->messageHandleUseCase->execute($chat->telegram_id, $this->message['text']);
+            $this->messageHandleUseCase->execute($chat->telegram_id, $message['text']);
         }
     }
 }
