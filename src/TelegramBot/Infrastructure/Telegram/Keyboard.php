@@ -28,8 +28,11 @@ class Keyboard
         foreach ($this->buttons as $button) {
             $array[] = $button->toArray();
         }
+
         return [
-            'inline_keyboard' => $array
+            'inline_keyboard' => [
+                $array
+            ]
         ];
     }
 }

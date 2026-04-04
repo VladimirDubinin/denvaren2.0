@@ -6,11 +6,12 @@ use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
-final readonly class TelegramService
+final class TelegramService
 {
     private string $message;
-    private array $replyMarkup;
+    private array $replyMarkup = [];
 
     /**
      * @throws ConnectionException
@@ -18,6 +19,7 @@ final readonly class TelegramService
     private function request(string $method, array $payload = []): void
     {
         $token = config('telegram.bot_token');
+        Log::debug(print_r($payload, true));
         Http::post("https://api.telegram.org/bot{$token}/{$method}", $payload);
     }
 
@@ -90,7 +92,7 @@ final readonly class TelegramService
 
     public function keyboard(Keyboard $keyboard): self
     {
-        $this->replyMarkup[] = $keyboard->toArray();
+        $this->replyMarkup = $keyboard->toArray();
         return $this;
     }
 
