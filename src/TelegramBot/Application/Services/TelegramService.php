@@ -59,12 +59,7 @@ final readonly class TelegramService
         );
     }
 
-     public function registerBotCommands(array $commands): void
-     {
-
-     }
-
-    public function isCommand(array $entities = []): bool
+    public function isCommand(array|null $entities): bool
     {
         return !empty($entities)
             && isset($entities[0]['type'])
