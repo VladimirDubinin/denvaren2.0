@@ -19,7 +19,9 @@ final class TelegramService
     private function request(string $method, array $payload = []): void
     {
         $token = config('telegram.bot_token');
-        Log::debug(print_r($payload, true));
+        if (config('app.debug')) {
+            Log::debug('Request: ' . PHP_EOL . print_r($payload, true));
+        }
         Http::post("https://api.telegram.org/bot{$token}/{$method}", $payload);
     }
 

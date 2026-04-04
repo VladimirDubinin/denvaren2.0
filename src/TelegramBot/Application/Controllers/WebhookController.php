@@ -28,7 +28,7 @@ final class WebhookController extends Controller
     public function __invoke(Request $request): void
     {
         if (config('app.debug')) {
-            Log::debug(print_r($request->all(), true));
+            Log::debug('Response: ' . PHP_EOL . print_r($request->all(), true));
         }
 
         $message = $request->input('message');
