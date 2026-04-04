@@ -13,7 +13,7 @@ final class CommandManager
     public function getCommandInstance(string $command): TelegramCommandInterface
     {
         $commandClass = __NAMESPACE__ . '\\Commands\\' . $command . 'Command';
-        if (!class_exists($commandClass) || !$commandClass::implementsInterface(TelegramCommandInterface::class) ) {
+        if (!class_exists($commandClass)) {
             throw new UnknownCommandException("Нет такой команды: {$command} 🙃");
         }
         return new $commandClass;
