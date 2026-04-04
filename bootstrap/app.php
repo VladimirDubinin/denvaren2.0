@@ -4,6 +4,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\TelegramBot\Infrastructure\Middlewares\CheckSecretTokenMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('notifications:check')->dailyAt('09:00');
     })
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->api(CheckSecretTokenMiddleware::class);
     })
     ->withCommands(
         [
