@@ -32,9 +32,9 @@ final class WebhookController extends Controller
         $chat = Telegram::chat($request->message['chat']);
 
         if (Telegram::isCommand($request->entities)) {
-            $this->commandHandleUseCase->execute($chat->telegram_id, $request->text);
+            $this->commandHandleUseCase->execute($chat->telegram_id, $request->message['text']);
         } else {
-            $this->messageHandleUseCase->execute($chat->telegram_id, $request->text);
+            $this->messageHandleUseCase->execute($chat->telegram_id, $request->message['text']);
         }
     }
 }

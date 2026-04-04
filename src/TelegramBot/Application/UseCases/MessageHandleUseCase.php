@@ -2,7 +2,6 @@
 
 namespace App\TelegramBot\Application\UseCases;
 
-use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final readonly class MessageHandleUseCase

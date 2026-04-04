@@ -4,7 +4,6 @@ namespace App\TelegramBot\Application\UseCases;
 
 use App\TelegramBot\Application\TelegramCommands\CommandManager;
 use App\TelegramBot\Domain\Exceptions\UnknownCommandException;
-use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final readonly class CommandHandleUseCase
