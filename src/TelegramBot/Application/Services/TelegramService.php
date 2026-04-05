@@ -3,14 +3,17 @@
 namespace App\TelegramBot\Application\Services;
 
 use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
-use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Infrastructure\Repositories\ChatRepository;
 use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 final class TelegramService
 {
+    public function __construct(
+        private readonly ChatRepository $chatRepository,
+    ) {
+    }
     private string $message;
     private array $replyMarkup = [];
 
@@ -70,28 +73,8 @@ final class TelegramService
             $isCommand = $this->isCommand($array['message']);
         }
 
-        $chat = $this->chat($chatArray);
+        $chat = $this->chatRepository->updateOrCreate($chatArray);
         return new TelegramRequestDTO($chat, $text, $isCommand);
-    }
-
-    /**
-     * Создает или обновляет данные чата из запроса
-     *
-     * @param array $chatData
-     * @return Chat
-     */
-    public function chat(array $chatData): Chat
-    {
-        return Chat::query()->updateOrCreate(
-            [
-                'telegram_id' => $chatData['id'],
-                'username' => $chatData['username'],
-            ],
-            [
-                'first_name' => $chatData['first_name'] ?? '',
-                'last_name' => $chatData['last_name'] ?? '',
-            ]
-        );
     }
 
     /**
