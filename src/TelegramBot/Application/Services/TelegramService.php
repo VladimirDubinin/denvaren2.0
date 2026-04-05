@@ -29,7 +29,7 @@ final class TelegramService
             'endpoint' => $this->endpoint,
             'bot' => "bot{$token}",
             'method' => $method,
-        ])->post('{endpoint}/{bot}/{method}', $payload);
+        ])->post('{+endpoint}/{bot}/{method}', $payload);
     }
 
     /**
