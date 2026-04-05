@@ -2,13 +2,14 @@
 
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
+use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 
 final class ListCommand implements TelegramCommandInterface
 {
-    public function handle(int $chatId): void
+    public function handle(Chat $chat): void
     {
-        Telegram::sendMessage('Команда /list', $chatId);
+        Telegram::sendMessage('Команда /list', $chat->telegram_id);
     }
 }

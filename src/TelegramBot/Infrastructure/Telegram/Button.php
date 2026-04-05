@@ -36,24 +36,28 @@ class Button
         $key = trim($key);
         $value = trim((string) $value);
 
-        $this->callbackData[] = "$key:$value";
+        $this->callbackData[$key] = $value;
         return $this;
     }
 
     public function toArray(): array
     {
-        $array = [
-            'text' => $this->label,
-        ];
-
         if (count($this->callbackData) > 0) {
-            $array['callback_data'] = implode(';', $this->callbackData);
+            return [
+                'text' => $this->label,
+                'callback_data' => json_encode($this->callbackData)
+            ];
         }
 
         if (isset($this->url)) {
-            $array['url'] = $this->url;
+            return [
+                'text' => $this->label,
+                'url' => $this->url
+            ];
         }
 
-        return $array;
+        return [
+            'text' => $this->label,
+        ];
     }
 }

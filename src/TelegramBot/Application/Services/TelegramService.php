@@ -2,6 +2,7 @@
 
 namespace App\TelegramBot\Application\Services;
 
+use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
@@ -19,9 +20,6 @@ final class TelegramService
     private function request(string $method, array $payload = []): void
     {
         $token = config('telegram.bot_token');
-        if (config('app.debug')) {
-            Log::debug('Request: ' . PHP_EOL . print_r($payload, true));
-        }
         Http::post("https://api.telegram.org/bot{$token}/{$method}", $payload);
     }
 
@@ -51,6 +49,29 @@ final class TelegramService
     public function setMyCommands(array $commands): void
     {
         $this->request(__FUNCTION__, ['commands' => $commands]);
+    }
+
+    /**
+     * Возвращает DTO из массива запроса от телеграм-бота
+     *
+     * @param array $array
+     * @return TelegramRequestDTO
+     */
+    public function fromArray(array $array): TelegramRequestDTO
+    {
+        if (array_key_exists('callback_query', $array)) {
+            $chatArray = $array['callback_query']['message']['chat'];
+            $data = json_decode($array['callback_query']['data'], true);
+            $text = (is_array($data) && array_key_exists('action', $data)) ? $data['action'] : '';
+            $isCommand = true;
+        } else {
+            $chatArray = $array['message']['chat'];
+            $text = $array['message']['text'];
+            $isCommand = $this->isCommand($array['message']);
+        }
+
+        $chat = $this->chat($chatArray);
+        return new TelegramRequestDTO($chat, $text, $isCommand);
     }
 
     /**
