@@ -17,6 +17,8 @@ class Chat extends Model
         'last_name',
         'telegram_id',
         'username',
+        'waiting_add_answer',
+        'waiting_delete_answer',
     ];
 
     /**
