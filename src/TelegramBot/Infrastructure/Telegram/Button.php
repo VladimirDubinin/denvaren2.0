@@ -8,6 +8,7 @@ class Button
 {
     private string $url;
     private array $callbackData = [];
+    private int $width = 0;
 
     private function __construct(
         private readonly string $label,
@@ -17,6 +18,28 @@ class Button
     public static function make(string $label): Button
     {
         return new self($label);
+    }
+
+    public function width(float $percentage): Button
+    {
+        $width = (int) ($percentage * 100);
+
+        if ($width > 100) {
+            $width = 100;
+        }
+
+        $this->width = $width;
+
+        return $this;
+    }
+
+    public function getWidth(): float
+    {
+        if ($this->width === 0) {
+            return 1;
+        }
+
+        return $this->width / 100;
     }
 
     public function url(string $url): static

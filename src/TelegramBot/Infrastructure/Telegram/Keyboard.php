@@ -24,15 +24,26 @@ class Keyboard
 
     public function toArray(): array
     {
-        $array = [];
+        $keyboard = [];
+
+        $row = [];
+        $rowWidth = 0;
+
         foreach ($this->buttons as $button) {
-            $array[] = $button->toArray();
+            if ($rowWidth + $button->getWidth() > 1) {
+                $keyboard[] = $row;
+                $row = [];
+                $rowWidth = 0;
+            }
+
+            $row[] = $button->toArray();
+            $rowWidth += $button->getWidth();
         }
 
+        $keyboard[] = $row;
+
         return [
-            'inline_keyboard' => [
-                $array
-            ]
+            'inline_keyboard' => $keyboard
         ];
     }
 }

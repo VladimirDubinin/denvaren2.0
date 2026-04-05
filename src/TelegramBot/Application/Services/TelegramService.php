@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Http;
 
 final class TelegramService
 {
+    private string $message;
+    private array $replyMarkup = [];
+
     public function __construct(
         private readonly ChatRepository $chatRepository,
     ) {
     }
-    private string $message;
-    private array $replyMarkup = [];
 
     /**
      * @throws ConnectionException
