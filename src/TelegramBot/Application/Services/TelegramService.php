@@ -12,6 +12,7 @@ final class TelegramService
 {
     private string $message;
     private array $replyMarkup = [];
+    private string $endpoint = 'https://api.telegram.org';
 
     public function __construct(
         private readonly ChatRepository $chatRepository,
@@ -24,7 +25,11 @@ final class TelegramService
     private function request(string $method, array $payload = []): void
     {
         $token = config('telegram.bot_token');
-        Http::post("https://api.telegram.org/bot{$token}/{$method}", $payload);
+        Http::withUrlParameters([
+            'endpoint' => $this->endpoint,
+            'bot' => "bot{$token}",
+            'method' => $method,
+        ])->post('{endpoint}/{bot}/{method}', $payload);
     }
 
     /**

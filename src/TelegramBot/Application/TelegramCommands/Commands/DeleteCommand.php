@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
 use App\TelegramBot\Domain\Models\Chat;
@@ -10,6 +12,12 @@ final class DeleteCommand implements TelegramCommandInterface
 {
     public function handle(Chat $chat): void
     {
-        Telegram::sendMessage('Команда /delete', $chat->telegram_id);
+        $chat->waiting_add_answer = false;
+
+        Telegram::message('Укажите дату напоминания, которое хотите удалить')
+            ->send($chat->telegram_id);
+
+        $chat->waiting_delete_answer = true;
+        $chat->save();
     }
 }

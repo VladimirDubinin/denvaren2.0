@@ -1,15 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
 use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
+use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 
-final class AddCommand implements TelegramCommandInterface
+final readonly class AddCommand implements TelegramCommandInterface
 {
+    public function __construct(
+        private HolidayRepository $holidayRepository
+    ) {
+    }
+
     public function handle(Chat $chat): void
     {
-        Telegram::sendMessage('Команда /add', $chat->telegram_id);
+        $chat->waiting_delete_answer = false;
+
+        $this->holidayRepository->add($chat->id);
+        Telegram::message("Больше праздников - больше положительных эмоций!\n\nУкажи дату предстоящего события в таком формате \"дд.мм.гггг\"")
+            ->send($chat->telegram_id);
+
+        $chat->waiting_add_answer = true;
+        $chat->save();
     }
 }
