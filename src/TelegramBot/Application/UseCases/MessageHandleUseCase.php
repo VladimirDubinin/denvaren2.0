@@ -8,7 +8,6 @@ use App\TelegramBot\Domain\Exceptions\AddDateException;
 use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
-use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 
 final readonly class MessageHandleUseCase
 {
@@ -52,14 +51,6 @@ final readonly class MessageHandleUseCase
             }
         } else {
             $currentHoliday->update(['description' => $text]);
-            Telegram::message('Повторять напоминание каждый год?')->keyboard(Keyboard::make()
-                ->button('Каждый год')->action('setRepeating')
-                ->param('id', $currentHoliday->id)->param('repeat', true)
-                ->button('Однократно')->action('setRepeating')
-                ->param('id', $currentHoliday->id)->param('repeat', false)
-                ->chunk(2)
-            )->send($chat->telegram_id);
-
             $chat->waiting_add_answer = false;
             $chat->save();
         }

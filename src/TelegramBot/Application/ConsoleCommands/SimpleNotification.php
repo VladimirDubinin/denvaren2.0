@@ -2,8 +2,9 @@
 
 namespace App\TelegramBot\Application\ConsoleCommands;
 
+use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Domain\Models\Holiday;
-use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
+use App\TelegramBot\Infrastructure\Facades\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -26,21 +27,20 @@ class SimpleNotification extends Command
     /**
      * Execute the console command.
      */
-    public function handle(HolidayRepository $holidayService): int
+    public function handle(): int
     {
         try {
             $holidayId = $this->argument('id');
             $holiday = Holiday::query()->findOrFail($holidayId);
-            $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
-            $chat->message("🗓Сегодня {$holiday->date->format('d.m.Y')}, а значит - {$holiday->description}🥳")->send();
+            $chat = Chat::query()->findOrFail($holiday->chat_id);
+            Telegram::sendMessage(
+                "🗓Сегодня {$holiday->date->format('d.m.Y')}, а значит - {$holiday->description}🥳",
+                $chat->telegram_id
+            );
 
-            if ($holiday->repeat) {
-                $holiday->update([
-                   'date' =>  $holiday->date->addYear()
-                ]);
-            } else {
-                $holidayService->deleteHolidayById($holidayId, $chat->id);
-            }
+            $holiday->update([
+                'date' =>  $holiday->date->addYear()
+            ]);
 
             return self::SUCCESS;
         } catch (\Exception $e) {

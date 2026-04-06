@@ -2,9 +2,10 @@
 
 namespace App\TelegramBot\Application\ConsoleCommands;
 
-use App\TelegramBot\Application\Services\ChatService;
+use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Domain\Models\Holiday;
-use DefStudio\Telegraph\Models\TelegraphChat;
+use App\TelegramBot\Infrastructure\Facades\DeepSeek;
+use App\TelegramBot\Infrastructure\Facades\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -32,16 +33,19 @@ class GenNotification extends Command
         try {
             $holidayId = $this->argument('id');
             $holiday = Holiday::query()->findOrFail($holidayId);
-            $chat = TelegraphChat::query()->findOrFail($holiday->chat_id);
+            $chat = Chat::query()->findOrFail($holiday->chat_id);
 
             $input = "Дата: {$holiday->date->format('d.m.Y')}, описание праздника: {$holiday->description}.
             Предложи вариант поздравления.";
-            $response = ChatService::requestAI($input);
+            $response = DeepSeek::requestAI($input);
             if (empty($response)) {
                 throw new \Exception('Ошибка AI: пустой ответ.');
             }
 
-            $chat->message("Завтра у тебя важная дата - {$holiday->description}🎉\nДержи оригинальное поздравление с праздником🤝 \n\n" . $response)->send();
+            Telegram::sendMessage(
+                "Завтра у тебя важная дата - {$holiday->description}🎉\nДержи оригинальное поздравление с праздником🤝 \n\n" . $response,
+                $chat->telegram_id
+            );
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error("Ошибка отправки уведомления: {$e->getMessage()}");
