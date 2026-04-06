@@ -36,7 +36,7 @@ final class WebhookController extends Controller
         if ($DTO->isCommand) {
             $this->commandHandleUseCase->execute($DTO->chat, $DTO->text);
         } else {
-            $this->messageHandleUseCase->execute($DTO->chat->telegram_id, $DTO->text);
+            $this->messageHandleUseCase->execute($DTO->chat, $DTO->text);
         }
     }
 }

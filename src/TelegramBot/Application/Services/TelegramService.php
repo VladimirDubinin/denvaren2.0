@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\Services;
 
 use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;

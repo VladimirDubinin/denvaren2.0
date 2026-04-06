@@ -22,6 +22,17 @@ class Keyboard
         return new KeyboardButtonProxy($this, $button);
     }
 
+    public function chunk(int $chunk): Keyboard
+    {
+        $buttonWidth = 1 / $chunk;
+
+        foreach ($this->buttons as $button) {
+            $button->width($buttonWidth);
+        }
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         $keyboard = [];

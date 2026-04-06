@@ -1,14 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\UseCases;
 
+use App\TelegramBot\Domain\Exceptions\AddDateException;
+use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
+use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
+use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 
 final readonly class MessageHandleUseCase
 {
-    public function execute(int $chatId, string $text): void
+    public function  __construct(
+        private HolidayRepository $holidayRepository
+    ) {
+    }
+
+    public function execute(Chat $chat, string $text): void
     {
-        //TODO: сделать реализацию ответа на сообщения
-        Telegram::sendMessage($text, $chatId);
+        if ($chat->waiting_add_answer) {
+            $this->updateHoliday($chat, $text);
+        } elseif ($chat->waiting_delete_answer) {
+            $this->deleteHoliday($chat, $text);
+        } else {
+            Telegram::sendMessage(
+                "Извини, у меня нет времени на поболтать😎 Воспользуйся одной из команд",
+                $chat->telegram_id
+            );
+        }
+    }
+
+    private function updateHoliday(Chat $chat, string $text): void
+    {
+        $currentHoliday = $this->holidayRepository->getCurrent($chat->id);
+        if (empty($currentHoliday)) {
+            Telegram::sendMessage(
+                "Возникла непредвиденная ошибка :( Попробуйте заново",
+                $chat->telegram_id
+            );
+        } elseif (empty($currentHoliday->date)) {
+            try {
+                $result = $this->holidayRepository->setDate($currentHoliday, $text);
+            } catch (AddDateException $e) {
+                $result = $e->getMessage();
+            } finally {
+                Telegram::sendMessage(
+                    $result,
+                    $chat->telegram_id
+                );
+            }
+        } else {
+            $currentHoliday->update(['description' => $text]);
+            Telegram::message('Повторять напоминание каждый год?')->keyboard(Keyboard::make()
+                ->button('Каждый год')->action('setRepeating')
+                ->param('id', $currentHoliday->id)->param('repeat', true)
+                ->button('Однократно')->action('setRepeating')
+                ->param('id', $currentHoliday->id)->param('repeat', false)
+                ->chunk(2)
+            )->send($chat->telegram_id);
+
+            $chat->waiting_add_answer = false;
+            $chat->save();
+        }
+    }
+
+    private function deleteHoliday(Chat $chat, string $text): void
+    {
+        //TODO: Реализовать удаление события
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Infrastructure\Repositories;
 
 use App\TelegramBot\Domain\Models\Chat;

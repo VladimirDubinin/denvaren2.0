@@ -54,7 +54,7 @@ class Button
         return $this->param('action', $name);
     }
 
-    private function param(string $key, int|string $value): static
+    public function param(string $key, int|string|bool $value): static
     {
         $key = trim($key);
         $value = trim((string) $value);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\TelegramBot\Application\UseCases;
 
 use App\TelegramBot\Application\TelegramCommands\CommandManager;
