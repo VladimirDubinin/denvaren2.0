@@ -6,10 +6,11 @@ namespace App\TelegramBot\Infrastructure\Repositories;
 
 use App\TelegramBot\Domain\Exceptions\AddDateException;
 use App\TelegramBot\Domain\Models\Holiday;
+use App\TelegramBot\Domain\Repositories\HolidayRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class HolidayRepository
+class HolidayRepository implements HolidayRepositoryInterface
 {
     /**
      * Возвращает событие, добавление которого идёт в данный момент

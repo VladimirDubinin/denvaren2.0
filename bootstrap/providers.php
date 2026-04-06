@@ -1,5 +1,6 @@
 <?php
 
 return [
-    App\Providers\AppServiceProvider::class,
+    \App\TelegramBot\Infrastructure\Providers\ChatServiceProvider::class,
+    \App\TelegramBot\Infrastructure\Providers\HolidayServiceProvider::class,
 ];

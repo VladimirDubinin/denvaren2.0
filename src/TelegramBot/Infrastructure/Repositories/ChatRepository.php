@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\TelegramBot\Infrastructure\Repositories;
 
 use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Domain\Repositories\ChatRepositoryInterface;
 
-class ChatRepository
+class ChatRepository implements ChatRepositoryInterface
 {
     /**
      * Создает или обновляет данные чата из запроса

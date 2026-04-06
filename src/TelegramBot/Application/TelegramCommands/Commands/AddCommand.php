@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
 use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Domain\Repositories\HolidayRepositoryInterface;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
-use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 
 final readonly class AddCommand implements TelegramCommandInterface
 {
     public function __construct(
-        private HolidayRepository $holidayRepository
+        private HolidayRepositoryInterface $holidayRepository
     ) {
     }
 

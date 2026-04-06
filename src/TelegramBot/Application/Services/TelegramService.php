@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\TelegramBot\Application\Services;
 
 use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
-use App\TelegramBot\Infrastructure\Repositories\ChatRepository;
+use App\TelegramBot\Domain\Repositories\ChatRepositoryInterface;
 use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -17,7 +17,7 @@ final class TelegramService
     private string $endpoint = 'https://api.telegram.org';
 
     public function __construct(
-        private readonly ChatRepository $chatRepository,
+        private readonly ChatRepositoryInterface $chatRepository,
     ) {
     }
 

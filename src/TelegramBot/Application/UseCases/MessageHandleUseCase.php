@@ -6,13 +6,13 @@ namespace App\TelegramBot\Application\UseCases;
 
 use App\TelegramBot\Domain\Exceptions\AddDateException;
 use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Domain\Repositories\HolidayRepositoryInterface;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
-use App\TelegramBot\Infrastructure\Repositories\HolidayRepository;
 
 final readonly class MessageHandleUseCase
 {
     public function  __construct(
-        private HolidayRepository $holidayRepository
+        private HolidayRepositoryInterface $holidayRepository
     ) {
     }
 
