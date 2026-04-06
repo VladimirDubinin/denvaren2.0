@@ -34,26 +34,25 @@ final readonly class MessageHandleUseCase
     {
         $currentHoliday = $this->holidayRepository->getCurrent($chat->id);
         if (empty($currentHoliday)) {
-            Telegram::sendMessage(
-                "Возникла непредвиденная ошибка :( Попробуйте заново",
-                $chat->telegram_id
-            );
+            $message = "Возникла непредвиденная ошибка :( Попробуйте заново";
         } elseif (empty($currentHoliday->date)) {
             try {
-                $result = $this->holidayRepository->setDate($currentHoliday, $text);
+                $message = $this->holidayRepository->setDate($currentHoliday, $text);
             } catch (AddDateException $e) {
-                $result = $e->getMessage();
-            } finally {
-                Telegram::sendMessage(
-                    $result,
-                    $chat->telegram_id
-                );
+                $message = $e->getMessage();
             }
         } else {
             $currentHoliday->update(['description' => $text]);
             $chat->waiting_add_answer = false;
             $chat->save();
+            $message = 'Я всё записал, ожидай напоминание 😉';
+
         }
+
+        Telegram::sendMessage(
+            $message,
+            $chat->telegram_id
+        );
     }
 
     private function deleteHoliday(Chat $chat, string $text): void
