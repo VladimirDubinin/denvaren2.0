@@ -23,7 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
         [
             \App\TelegramBot\Application\ConsoleCommands\SetWebhook::class,
             \App\TelegramBot\Application\ConsoleCommands\SetMyCommands::class,
-            \App\TelegramBot\Application\ConsoleCommands\AIRequest::class,
             \App\TelegramBot\Application\ConsoleCommands\CheckNotifications::class,
             \App\TelegramBot\Application\ConsoleCommands\GenNotification::class,
             \App\TelegramBot\Application\ConsoleCommands\SimpleNotification::class
