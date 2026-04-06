@@ -6,7 +6,7 @@
 ## Порядок установки
 
 ```bash
-git clone git@github.com:VladimirDubinin/denvaren.git {PROJECT_NAME}.loc
+git clone git@github.com:VladimirDubinin/denvaren2.0.git {PROJECT_NAME}.loc
 ```
 
 ```bash
@@ -31,7 +31,8 @@ php artisan key:generate
 php artisan migrate
 ```
 
-В env указать модель нейросети в параметре OPENROUTER_MODEL и ключ в OPENROUTER_API_KEY
+В env необходимо указать токен бота в поле TELEGRAM_BOT_TOKEN, секретный токен в поле SECRET_KEY, 
+указать модель нейросети в параметре OPENROUTER_MODEL и ключ в OPENROUTER_API_KEY
 
 ## Установка в докере
 
