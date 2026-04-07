@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\TelegramBot\Application\UseCases;
 
+use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Domain\Models\Holiday;
 use App\TelegramBot\Domain\Exceptions\AddDateException;
 use App\TelegramBot\Domain\Models\Chat;
@@ -18,16 +19,16 @@ final readonly class MessageHandleUseCase
     ) {
     }
 
-    public function execute(Chat $chat, string $text): void
+    public function execute(TelegramRequestDTO $DTO): void
     {
-        if ($chat->waiting_add_answer) {
-            $this->updateHoliday($chat, $text);
-        } elseif ($chat->waiting_delete_answer) {
-            $this->deleteHoliday($chat, $text);
+        if ($DTO->chat->waiting_add_answer) {
+            $this->updateHoliday($DTO->chat, $DTO->text);
+        } elseif ($DTO->chat->waiting_delete_answer) {
+            $this->deleteHoliday($DTO->chat, $DTO->text);
         } else {
             Telegram::sendMessage(
                 "Извини, у меня нет времени на поболтать😎 Воспользуйся одной из команд",
-                $chat->telegram_id
+                $DTO->chat->telegram_id
             );
         }
     }

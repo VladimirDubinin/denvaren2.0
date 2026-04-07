@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\TelegramBot\Application\UseCases;
 
+use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Application\TelegramCommands\CommandManager;
 use App\TelegramBot\Domain\Exceptions\UnknownCommandException;
 use App\TelegramBot\Domain\Models\Chat;
@@ -16,13 +17,13 @@ final readonly class CommandHandleUseCase
     ) {
     }
 
-    public function execute(Chat $chat, string $command): void
+    public function execute(TelegramRequestDTO $DTO): void
     {
         $this->prepareCommandName($command);
         try {
-            $this->commandManager->getCommandInstance($command)->handle($chat);
+            $this->commandManager->getCommandInstance($command)->handle($DTO);
         } catch (UnknownCommandException $e) {
-            Telegram::sendMessage($e->getMessage(), $chat->telegram_id);
+            Telegram::sendMessage($e->getMessage(), $DTO->chat->telegram_id);
         }
     }
 

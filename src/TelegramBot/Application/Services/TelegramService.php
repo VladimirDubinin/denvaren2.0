@@ -70,6 +70,7 @@ final class TelegramService
      */
     public function fromArray(array $array): TelegramRequestDTO
     {
+        $updateId = $array['update_id'];
         if (array_key_exists('callback_query', $array)) {
             $chatArray = $array['callback_query']['message']['chat'];
             $data = json_decode($array['callback_query']['data'], true);
@@ -82,7 +83,7 @@ final class TelegramService
         }
 
         $chat = $this->chatRepository->updateOrCreate($chatArray);
-        return new TelegramRequestDTO($chat, $text, $isCommand);
+        return new TelegramRequestDTO($updateId, $chat, $text, $isCommand, $data ?? []);
     }
 
     /**

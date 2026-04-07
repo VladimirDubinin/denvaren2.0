@@ -31,12 +31,12 @@ final class WebhookController extends Controller
             Log::debug('Response: ' . PHP_EOL . print_r($request->all(), true));
         }
 
-        $DTO = Telegram::fromArray($request->all());
+        $requestDTO = Telegram::fromArray($request->all());
 
-        if ($DTO->isCommand) {
-            $this->commandHandleUseCase->execute($DTO->chat, $DTO->text);
+        if ($requestDTO->isCommand) {
+            $this->commandHandleUseCase->execute($requestDTO);
         } else {
-            $this->messageHandleUseCase->execute($DTO->chat, $DTO->text);
+            $this->messageHandleUseCase->execute($requestDTO);
         }
     }
 }
