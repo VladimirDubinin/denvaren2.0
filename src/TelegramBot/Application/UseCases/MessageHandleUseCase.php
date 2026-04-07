@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\TelegramBot\Application\UseCases;
 
+use App\TelegramBot\Domain\Models\Holiday;
 use App\TelegramBot\Domain\Exceptions\AddDateException;
 use App\TelegramBot\Domain\Models\Chat;
 use App\TelegramBot\Domain\Repositories\HolidayRepositoryInterface;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
+use Carbon\Carbon;
 
 final readonly class MessageHandleUseCase
 {
@@ -57,6 +59,28 @@ final readonly class MessageHandleUseCase
 
     private function deleteHoliday(Chat $chat, string $text): void
     {
-        //TODO: Реализовать удаление события
+        if (!Carbon::canBeCreatedFromFormat($text, 'd.m.Y')) {
+            $message = 'Некорректная дата :( Введи дату напоминания в таком формате "дд.мм.гггг"';
+        } else {
+            $date = Carbon::createFromFormat('d.m.Y', $text);
+            $holiday = Holiday::query()
+                ->where('date', $date->format('Y-m-d'))
+                ->where('chat_id', $chat->id)
+                ->first();
+
+            if ($holiday) {
+                $holiday->delete();
+                $message = 'Напоминание удалено🥲';
+            } else {
+                $message = 'Напоминание не найдено😢';
+            }
+        }
+
+        Telegram::sendMessage(
+            $message,
+            $chat->telegram_id
+        );
+        $chat->waiting_delete_answer = false;
+        $chat->save();
     }
 }
