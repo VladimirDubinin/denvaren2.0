@@ -19,7 +19,7 @@ final readonly class CommandHandleUseCase
 
     public function execute(TelegramRequestDTO $DTO): void
     {
-        $this->prepareCommandName($command);
+        $command = $this->prepareCommandName($DTO->text);
         try {
             $this->commandManager->getCommandInstance($command)->handle($DTO);
         } catch (UnknownCommandException $e) {
@@ -27,9 +27,9 @@ final readonly class CommandHandleUseCase
         }
     }
 
-    private function prepareCommandName(string &$text): void
+    private function prepareCommandName(string $text): string
     {
-        $text = preg_replace('/[^a-zA-Z0-9]/', '', $text);
-        $text = ucfirst($text);
+        $command = preg_replace('/[^a-zA-Z0-9]/', '', $text);
+        return ucfirst($command);
     }
 }
