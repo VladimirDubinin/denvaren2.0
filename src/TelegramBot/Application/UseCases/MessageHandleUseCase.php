@@ -75,13 +75,14 @@ final readonly class MessageHandleUseCase
             } else {
                 $message = 'Напоминание не найдено😢';
             }
+
+            $chat->waiting_delete_answer = false;
+            $chat->save();
         }
 
         Telegram::sendMessage(
             $message,
             $chat->telegram_id
         );
-        $chat->waiting_delete_answer = false;
-        $chat->save();
     }
 }
