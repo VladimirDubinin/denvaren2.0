@@ -1,6 +1,6 @@
 <?php
 
-namespace App\TelegramBot\Application\Request\DTO;
+namespace App\TelegramBot\Domain\Request\DTO;
 
 use App\TelegramBot\Domain\Models\Chat;
 use Spatie\LaravelData\Data;

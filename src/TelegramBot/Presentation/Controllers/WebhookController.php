@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\TelegramBot\Application\Controllers;
+namespace App\TelegramBot\Presentation\Controllers;
 
-use App\TelegramBot\Application\UseCases\MessageHandleUseCase;
 use App\TelegramBot\Application\UseCases\CommandHandleUseCase;
+use App\TelegramBot\Application\UseCases\MessageHandleUseCase;
+use App\TelegramBot\Infrastructure\Facades\Telegram;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use App\TelegramBot\Infrastructure\Facades\Telegram;
 
 final class WebhookController extends Controller
 {

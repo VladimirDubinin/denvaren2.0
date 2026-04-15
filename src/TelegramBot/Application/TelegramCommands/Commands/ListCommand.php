@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\TelegramBot\Application\TelegramCommands\Commands;
 
-use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Domain\Repositories\HolidayRepositoryInterface;
+use App\TelegramBot\Domain\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Infrastructure\Facades\Telegram;
 use App\TelegramBot\Infrastructure\Telegram\Commands\TelegramCommandInterface;
 

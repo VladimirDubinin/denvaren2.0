@@ -1,10 +1,10 @@
 <?php
 
+use App\TelegramBot\Infrastructure\Middlewares\CheckSecretTokenMiddleware;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\TelegramBot\Infrastructure\Middlewares\CheckSecretTokenMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,11 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withCommands(
         [
-            \App\TelegramBot\Application\ConsoleCommands\SetWebhook::class,
-            \App\TelegramBot\Application\ConsoleCommands\SetMyCommands::class,
-            \App\TelegramBot\Application\ConsoleCommands\CheckNotifications::class,
-            \App\TelegramBot\Application\ConsoleCommands\GenNotification::class,
-            \App\TelegramBot\Application\ConsoleCommands\SimpleNotification::class
+            \App\TelegramBot\Presentation\Console\SetWebhook::class,
+            \App\TelegramBot\Presentation\Console\SetMyCommands::class,
+            \App\TelegramBot\Presentation\Console\CheckNotifications::class,
+            \App\TelegramBot\Presentation\Console\GenNotification::class,
+            \App\TelegramBot\Presentation\Console\SimpleNotification::class
         ]
     )
     ->withExceptions(function (Exceptions $exceptions): void {

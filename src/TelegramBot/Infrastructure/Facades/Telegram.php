@@ -2,10 +2,10 @@
 
 namespace App\TelegramBot\Infrastructure\Facades;
 
-use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
-use App\TelegramBot\Domain\Models\Chat;
-use Illuminate\Support\Facades\Facade;
 use App\TelegramBot\Application\Services\TelegramService;
+use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Domain\Request\DTO\TelegramRequestDTO;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static void sendMessage(string $message, ?int $chatId)

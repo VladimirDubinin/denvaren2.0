@@ -2,8 +2,7 @@
 
 namespace App\TelegramBot\Infrastructure\Telegram\Commands;
 
-use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
-use App\TelegramBot\Domain\Models\Chat;
+use App\TelegramBot\Domain\Request\DTO\TelegramRequestDTO;
 
 interface TelegramCommandInterface
 {

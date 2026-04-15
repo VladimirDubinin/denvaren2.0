@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\TelegramBot\Application\Services;
 
-use App\TelegramBot\Application\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Domain\Repositories\ChatRepositoryInterface;
+use App\TelegramBot\Domain\Request\DTO\TelegramRequestDTO;
 use App\TelegramBot\Infrastructure\Telegram\Keyboard;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
